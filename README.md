@@ -1,5 +1,11 @@
-# arduino-mpplab
+# Microcontroller with Arduino 🤖
 
 Repository for code backup from Microcontroller Practice Subject.
 
-Uno 
+## Testing Board 
+Arduino UNO R3 Atmega328P
+
+## Chapter
+Week 1: `lab-w1-*` PinSETUP, LED, if, (while,for) loop \
+Week 2: `lab-w2-*` RGB LED, Counter, AnalogRead \
+Week 3: `lab-w3-*` Interrupt
