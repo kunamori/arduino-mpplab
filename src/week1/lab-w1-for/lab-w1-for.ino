@@ -28,19 +28,22 @@ void setup() {
 }
 
 void loop() {
-
+  // turn on LED by using while 
   for (int i = 0; i < NUMBER_LED; i++){
     if(i >= i){
       digitalWrite(ledPins[i], HIGH);
     }
+    // buzzer notify after do action
     digitalWrite(Buzzer, HIGH);
     delay(500);
     digitalWrite(Buzzer, LOW);
     delay(500);
   }
+  // turn off all LEDs
   for (int i = 0; i < NUMBER_LED; i++) {
     digitalWrite(ledPins[i], LOW);
   }
+  // buzzer notify after do action
   digitalWrite(Buzzer, HIGH);
   delay(500);
   digitalWrite(Buzzer, LOW);

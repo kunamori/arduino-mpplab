@@ -8,26 +8,30 @@
 #define LED_5 6
 #define LED_6 5
 
-// Define Buzzer Pinout.
+// define Buzzer Pinout.
 #define Buzzer 4
 
-// Define Number of LED.
+// define Number of LED.
 int NUMBER_LED = 6;
 
-// Array for Registor into Function "PinMode".
+// array for Registor into Function "PinMode".
 int ledPins[] = { LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
 
-// Define global variable
+// define global variable
 int i = 1;
 
 void setup() {
+  // start serial daemon
   Serial.begin(9600);
+
   // for loop for registor pinMode.
   for (int i = 0; i < NUMBER_LED; i++) {
     pinMode(ledPins[i], OUTPUT);
   }
+
   // Register Buzzer Pinout
   pinMode(Buzzer, OUTPUT);
+
 }
 
 void loop() {
@@ -50,18 +54,21 @@ void loop() {
     digitalWrite(LED_6,HIGH);
   }
   if (i == 7){
+    // turn off all LEDs
     digitalWrite(LED_1,LOW);
     digitalWrite(LED_2,LOW);
     digitalWrite(LED_3,LOW);
     digitalWrite(LED_4,LOW);
     digitalWrite(LED_5,LOW);
     digitalWrite(LED_6,LOW);
-    i = 0;
+    i = 0; // reset to 0
   }
-
+  
+  // buzzer working after do action
   digitalWrite(Buzzer, HIGH);
   delay(500);
   digitalWrite(Buzzer, LOW);
   delay(500);
+
   i++;
 }
