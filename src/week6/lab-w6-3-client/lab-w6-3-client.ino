@@ -1,35 +1,39 @@
 #include <WiFi.h>
 
-bool state1=1,lastState1=1;
-bool state2=1,lastState2=1;
-char state_relay[2] = {0,0};
-
-// Wifi credentials
 char *ssid = "ESP32-Nihahaha";
 char *passwd = "12345678";
-const uint16_t port = 6969;
 char *host = "192.168.4.1";
+const uint16_t port = 6969;
+
+WiFiClient client;
 
 void setup() {
   Serial.begin(9600);
   WiFi.begin(ssid, passwd);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
+    delay(500);
+    Serial.print(".");
   }
-  pinMode(4, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
+  Serial.println("\nWiFi connected");
+
+   // ต่อครั้งเดียว
 }
-int oldvalue = 0;
+
 void loop() {
-  WiFiClient client;
-    int a = analogRead(34);
+  int a = analogRead(34);
   a = map(a, 0, 4095, 0, 180);
-  delay(50);
-  Serial.println(a);
-    if (client.connect(host, port)) {
-      client.print(String(a)+"&");
-      client.flush();
+  a = constrain(a, 0, 180);
+
+  if(client.connect(host, port)){
+    client.print(String(a) + "&");
+    client.flush();
+    while (client.available()==0);
+      String response = client.readStringUntil('&');
+      Serial.print("Response from server: ");
+      Serial.println(response);
       client.stop();
   }
+
+  Serial.println(a);
+  delay(50);
 }

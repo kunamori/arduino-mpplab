@@ -14,25 +14,31 @@ void setup() {
   WiFi.mode(WIFI_AP_STA);
   Serial.print("AP IP address: ");
   Serial.println(WiFi.softAPIP());
-  server.begin();
+  server.begin(port);
 
   Servo1.attach(26);
 }
 
 void loop() {
-  // Your code here
   WiFiClient client = server.available();
+
   if (client) {
     Serial.println("New Client connected");
+
     while (client.connected()) {
       if (client.available()) {
         String request = client.readStringUntil('&');
         Serial.print("Received request: ");
         Serial.println(request);
-        Servo1.write(request.toInt());
+
+        int angle = request.toInt();
+        Servo1.write(angle);
+        client.print("E&");
+        client.flush();
+      }
     }
+
     client.stop();
     Serial.println("Client disconnected");
-  }
   }
 }
