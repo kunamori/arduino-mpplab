@@ -9,6 +9,7 @@ char *host = "192.168.4.5";
 
 char packetBuffer[255];
 int data[2] = {0};
+int led_data[3] = {0,0,0};
 
 void setup() {
   Serial.begin(9600);
@@ -17,8 +18,13 @@ void setup() {
   WiFi.softAP(ssid, password);
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
-
+  
   udp.begin(port);
+}
+void RGBCON(int red, int green, int blue){
+  analogWrite(4, red);
+  analogWrite(2, green);
+  analogWrite(15, blue);
 }
 
 void loop() {
@@ -28,16 +34,18 @@ void loop() {
     if (len > 0) {
       packetBuffer[len] = '\0';
       String s(packetBuffer);
-      Serial.println("Received: " + s);
 
       splitString(s);
-
-      int c = data[0] + data[1];
-      Serial.println(c);
+      led_data[data[0]] = data[1];
+      RGBCON(led_data[0], led_data[1], led_data[2]);
+      delay(50);
+      Serial.println(data[0]);
+      Serial.println(data[1]);
     }
 
     udp.beginPacket(host, port);
     udp.print("A");
+    udp.flush();
     udp.endPacket();
   }
 }

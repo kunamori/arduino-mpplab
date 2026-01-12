@@ -11,7 +11,10 @@ IPAddress ip(192,168,4,5);
 IPAddress gateway(192,168,4,1);
 IPAddress subnet(255,255,255,0);
 
+unsigned long time_out = 0;
 String selLED = "0";
+int selLED_BTN = 0;
+bool state1=1,lastState1=1;
 
 void setup() {
   Serial.begin(9600);
@@ -24,25 +27,43 @@ void setup() {
     Serial.println("Connecting to WiFi...");
   }
 
-  Serial.println("Connected to WiFi");
+  pinMode(4, INPUT_PULLUP);
   Serial.println(WiFi.localIP());
-
   udp.begin(port);
 }
 
 void send_data(String message) {
   udp.beginPacket(host, port);
-  udp.print(message);
+  char char_message[255];
+  sprintf(char_message, "%s", message.c_str());
+  udp.print(char_message);
+  udp.flush();
   udp.endPacket();
 }
 
 void loop() {
+  state1=digitalRead(4);
+  if(state1!=lastState1){
+      delay(20); //debounce
+      if(digitalRead(4)==0){
+        selLED_BTN++;
+        if(selLED_BTN>2){
+          selLED_BTN=0;
+        }
+      }
+  }
+  lastState1=state1;
+  Serial.println(selLED_BTN);
+  selLED = String(selLED_BTN);
+
   int a = analogRead(34);
   a = map(a, 0, 4095, 0, 255);
+  String ab = String(a);
 
-  String a_str = String(a);
-    Serial.print(a);
-
+  if(millis()-time_out >= 1000){  
+    time_out = millis();
+    send_data("10_20&");
+  }
   int numbuffer = udp.parsePacket();
   if (numbuffer > 0) {
     char packetBuffer[255];
@@ -52,10 +73,10 @@ void loop() {
       String s(packetBuffer);
 
       if (s == "A") {
-        send_data(selLED + "_" + a_str + "&");
-        Serial.println("Sent: " + selLED + "_" + a_str);
+        send_data(selLED+"_"+ab+"&");
+        time_out = millis();
       }
     }
   }
-  delay(50);
+  delay(10);
 }
