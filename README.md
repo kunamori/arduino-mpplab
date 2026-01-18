@@ -2,15 +2,36 @@
 
 Repository for code backup from Microcontroller Practice Subject.
 
-## Testing Board 
-Arduino UNO R3 Atmega328P \
-ESP32 DEVKIT
+## 🧰 Hardware Requirements
+Arduino UNO R3 Atmega328P (Week 1-5) \
+ESP32 (Week 6-7) \
+Cables and Breadboard \
+Various Components (see individual lab instructions)
 
-## Chapter
-Week 1: `lab-w1-*` PinSETUP, LED, if, (while,for) loop \
-Week 2: `lab-w2-*` RGB LED, Counter, AnalogRead \
-Week 3: `lab-w3-*` Interrupt \
-Week 4: `lab-w4-*` LCD 16x2, DHT22 Sensor, LDR \
-Week 5: `lab-w5-*` PIN Login with 4x4 Keypad, RFID Module \
-Week 6: `lab-w6-*` WiFi Connection, IP Configuration, Send and Receive data with TCP/IP \
-Week 7: `lab-w7-*` Send and Receive data with UDP/IP 
+## 🗂️ Project Structure
+Each week's folder contains multiple labs with self-contained Arduino sketches. 
+
+### Week-by-Week Topics
+
+| Week | Topics | Key Components |
+|------|--------|----------------|
+| 1 | Pin setup, LED control, loops | LEDs, Push buttons |
+| 2 | RGB LED, Analog reading | RGB LED, Potentiometers |
+| 3 | Hardware interrupts | 7-segment display |
+| 4 | LCD display, Sensors | LCD 16x2, DHT22, LDR |
+| 5 | Input devices | 4x4 Keypad, RFID |
+| 6 | WiFi networking (ESP32) | TCP/IP communication |
+| 7 | UDP networking (ESP32) | UDP/IP communication |
+
+### Prerequisites
+```bash
+# Install Arduino IDE / Arduino CLI or PlatformIO
+# Install required libraries (see libraries.txt)
+```
+
+### Running a Lab with Arduino IDE
+1. Navigate to desired week/lab folder
+2. Open `.ino` file in Arduino IDE
+3. Select correct board (UNO or ESP32)
+4. Upload to board
+
