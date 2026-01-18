@@ -4,6 +4,7 @@ Repository for code backup from Microcontroller Practice Subject.
 
 ## Testing Board 
 Arduino UNO R3 Atmega328P
+ESP32 DEVKIT
 
 ## Chapter
 Week 1: `lab-w1-*` PinSETUP, LED, if, (while,for) loop \
