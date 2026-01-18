@@ -3,7 +3,7 @@
 Repository for code backup from Microcontroller Practice Subject.
 
 ## Testing Board 
-Arduino UNO R3 Atmega328P
+Arduino UNO R3 Atmega328P \
 ESP32 DEVKIT
 
 ## Chapter
