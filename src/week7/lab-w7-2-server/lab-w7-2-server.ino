@@ -5,12 +5,14 @@
 #define PIN_DHT 33
 #define DHTTYPE DHT22
 
+// DHT sensor object
 DHT dht(PIN_DHT, DHTTYPE);
 
-WiFiUDP udp;
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
+WiFiUDP udp;
 
 char packetBuffer[255];
 

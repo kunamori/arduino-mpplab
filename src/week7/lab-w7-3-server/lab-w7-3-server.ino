@@ -1,13 +1,19 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-WiFiUDP udp;
+#define LED_RED_PIN 4
+#define LED_GREEN_PIN 2
+#define LED_BLUE_PIN 15
+
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
 char *host = "192.168.4.5";
+WiFiUDP udp;
 
 char packetBuffer[255];
+
 int data[2] = {0};
 int led_data[3] = {0,0,0};
 
@@ -18,13 +24,7 @@ void setup() {
   WiFi.softAP(ssid, password);
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
-  
   udp.begin(port);
-}
-void RGBCON(int red, int green, int blue){
-  analogWrite(4, red);
-  analogWrite(2, green);
-  analogWrite(15, blue);
 }
 
 void loop() {
@@ -37,8 +37,11 @@ void loop() {
 
       splitString(s);
       led_data[data[0]] = data[1];
-      RGBCON(led_data[0], led_data[1], led_data[2]);
+      analogWrite(LED_RED_PIN, led_data[0]);
+      analogWrite(LED_GREEN_PIN, led_data[1]);
+      analogWrite(LED_BLUE_PIN, led_data[2]);
       delay(50);
+
       Serial.println(data[0]);
       Serial.println(data[1]);
     }
@@ -53,7 +56,6 @@ void loop() {
 void splitString(String str) {
   int index = 0;
   String s = "";
-
   for (int i = 0; i < str.length(); i++) {
     if (str[i] != '_' && str[i] != '&') {
       s += str[i];
@@ -63,6 +65,5 @@ void splitString(String str) {
       s = "";
     }
   }
-  // เก็บค่าตัวสุดท้าย
   data[index] = s.toInt();
 }

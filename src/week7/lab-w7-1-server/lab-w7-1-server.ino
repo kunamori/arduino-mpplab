@@ -9,17 +9,16 @@
 #define LED_6 25
 
 int NUMBER_LED = 6;
-
 int ledStatus[] = {0,0,0,0,0,0};
 int ledPins[] = { LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
-
 int selLED;
 
-WiFiUDP udp;
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
 char packetBuffer[255];
+WiFiUDP udp;
 
 void setup() {
   Serial.begin(9600);
@@ -38,11 +37,11 @@ void setup() {
 
 void loop() {
   int numBytes = udp.parsePacket();
+
   if (numBytes > 0) {
     int len = udp.read(packetBuffer, 255);
     if (len > 0) {
       packetBuffer[len] = '\0';
-
       String input(packetBuffer);
       selLED = input.toInt();
 
@@ -58,7 +57,7 @@ void loop() {
           ledStatus[index] = 0;
           Serial.println("LED " + input + " OFF");
         }
-      } else {
+      }else {
         Serial.println("ERROR: INPUT_USER");
       }
     }

@@ -1,19 +1,21 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-WiFiUDP udp;
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
 char *host = "192.168.4.1";
+WiFiUDP udp;
 
+// IP Configuration
 IPAddress ip(192,168,4,5);
 IPAddress gateway(192,168,4,1);
 IPAddress subnet(255,255,255,0);
-
 unsigned long time_out = 0;
-String selLED = "0";
-int selLED_BTN = 0;
+
+String selRGB = "0";
+int selRGB_BTN = 0;
 bool state1=1,lastState1=1;
 
 void setup() {
@@ -21,15 +23,14 @@ void setup() {
 
   WiFi.config(ip, gateway, subnet);
   WiFi.begin(ssid, password);
-
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Connecting to WiFi...");
   }
-
-  pinMode(4, INPUT_PULLUP);
   Serial.println(WiFi.localIP());
   udp.begin(port);
+
+  pinMode(4, INPUT_PULLUP);
 }
 
 void send_data(String message) {
@@ -46,15 +47,15 @@ void loop() {
   if(state1!=lastState1){
       delay(20); //debounce
       if(digitalRead(4)==0){
-        selLED_BTN++;
-        if(selLED_BTN>2){
-          selLED_BTN=0;
+        selRGB_BTN++;
+        if(selRGB_BTN>2){
+          selRGB_BTN=0;
         }
       }
   }
   lastState1=state1;
-  Serial.println(selLED_BTN);
-  selLED = String(selLED_BTN);
+  Serial.println(selRGB_BTN);
+  selRGB = String(selRGB_BTN);
 
   int a = analogRead(34);
   a = map(a, 0, 4095, 0, 255);
@@ -64,6 +65,7 @@ void loop() {
     time_out = millis();
     send_data("10_20&");
   }
+
   int numbuffer = udp.parsePacket();
   if (numbuffer > 0) {
     char packetBuffer[255];
@@ -73,7 +75,7 @@ void loop() {
       String s(packetBuffer);
 
       if (s == "A") {
-        send_data(selLED+"_"+ab+"&");
+        send_data(selRGB+"_"+ab+"&");
         time_out = millis();
       }
     }

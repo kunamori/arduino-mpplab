@@ -1,21 +1,23 @@
 #include <WiFi.h>
 #include <LiquidCrystal_I2C.h>
 
+// initialize the LCD library with the I2C address and dimensions
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-int show=0;
-
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
 WiFiServer server(port);
+
 void setup() {
   Serial.begin(9600);
+
   WiFi.softAP(ssid, password);
   WiFi.mode(WIFI_AP_STA);
+  server.begin();
   Serial.print("AP IP address: ");
   Serial.println(WiFi.softAPIP());
-  server.begin();
 
   lcd.init();
   lcd.backlight();
@@ -29,10 +31,11 @@ void setup() {
 }
 
 void loop() {
-  // Your code here
   WiFiClient client = server.available();
+
   if (client) {
     Serial.println("New Client connected");
+
     while (client.connected()) {
       if (client.available()) {
         String request = client.readStringUntil('&');
@@ -44,6 +47,7 @@ void loop() {
       }
     }
     client.stop();
+
     Serial.println("Client disconnected");
   }
 }

@@ -11,3 +11,5 @@ Week 2: `lab-w2-*` RGB LED, Counter, AnalogRead \
 Week 3: `lab-w3-*` Interrupt \
 Week 4: `lab-w4-*` LCD 16x2, DHT22 Sensor, LDR \
 Week 5: `lab-w5-*` PIN Login with 4x4 Keypad, RFID Module
+Week 6: `lab-w6-*` WiFi Connection, IP Configuration, Send and Receive data with TCP/IP
+Week 7: `lab-w7-*` Send and Receive data with UDP/IP

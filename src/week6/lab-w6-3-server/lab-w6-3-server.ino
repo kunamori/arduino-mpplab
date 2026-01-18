@@ -1,15 +1,17 @@
 #include <WiFi.h> 
 #include <ESP32Servo.h>
 
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
-
 WiFiServer server(port);
-Servo Servo1;
+
+Servo Servo1; // servo object
 
 void setup() {
   Serial.begin(9600);
+
   WiFi.softAP(ssid, password);
   WiFi.mode(WIFI_AP_STA);
   Serial.print("AP IP address: ");
@@ -37,7 +39,6 @@ void loop() {
         client.flush();
       }
     }
-
     client.stop();
     Serial.println("Client disconnected");
   }

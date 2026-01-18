@@ -1,11 +1,12 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-WiFiUDP udp;
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
 char *host = "192.168.4.1";
+WiFiUDP udp;
 
 void setup() {
   Serial.begin(9600);
@@ -22,6 +23,7 @@ void setup() {
 
 void loop() {
   udp.beginPacket(host, port);
+
   if(Serial.available() > 0 ){
     String selLED = Serial.readStringUntil('\n');
     char char_message[255];

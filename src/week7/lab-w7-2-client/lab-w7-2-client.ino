@@ -1,17 +1,21 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-WiFiUDP udp;
+// Wifi credentials
 const char* ssid = "ESP32-Nihahaha";
 const char* password = "12345678";
 const uint16_t port = 6969;
 char *host = "192.168.4.1";
+WiFiUDP udp;
 
+// IP Configuration
 IPAddress ip(192,168,4,5);
 IPAddress gateway(192,168,4,1);
 IPAddress subnet(255,255,255,0);
 unsigned long timeout = 0;
-String selLED;
+
+String SENSOR_DATA;
+
 void setup() {
   Serial.begin(9600);
   WiFi.config(ip, gateway, subnet);
@@ -29,11 +33,11 @@ void setup() {
 void loop() {
 
   if (Serial.available() > 0) {
-    selLED = Serial.readStringUntil('\n');
-    selLED.trim();
+    SENSOR_DATA = Serial.readStringUntil('\n');
+    SENSOR_DATA.trim();
 
     udp.beginPacket(host, port);
-    udp.print(selLED);
+    udp.print(SENSOR_DATA);
     udp.endPacket();
 
   }
@@ -45,10 +49,10 @@ void loop() {
     if (len > 0) {
       packetBuffer[len] = '\0';
       String input(packetBuffer);
-      if(selLED == "TEMP"){
+      if(SENSOR_DATA == "TEMP"){
         Serial.println("Received (Temperature) : " + input);
       }
-      if(selLED == "HUMI"){
+      if(SENSOR_DATA == "HUMI"){
         Serial.println("Received (Humidity) : " + input);
       }
     }

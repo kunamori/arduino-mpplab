@@ -15,19 +15,19 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
   Serial.begin(9600);
-  lcd.init();
-  // lcd.noBacklight();
-  lcd.backlight();
 
+  lcd.init();
+  lcd.backlight();
   lcd.home();
   lcd.print("Power On.");
   delay(2000);
-
   lcd.setCursor(10,1);
   lcd.print("   ");
   lcd.clear();
+
   SPI.begin();
   mfrc522.PCD_Init();
+
   pinMode(Buzzer, OUTPUT);
 }
 
