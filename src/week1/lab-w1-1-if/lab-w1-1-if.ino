@@ -1,6 +1,4 @@
 // Define LED Pinout
-// <-- Left    Right -->
-//    10 9 8 7 6 5 [4] <- Buzzer
 #define LED_1 10
 #define LED_2 9
 #define LED_3 8
@@ -63,7 +61,7 @@ void loop() {
     digitalWrite(LED_6,LOW);
     i = 0; // reset to 0
   }
-  
+
   // buzzer working after do action
   digitalWrite(Buzzer, HIGH);
   delay(500);

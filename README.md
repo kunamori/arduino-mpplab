@@ -2,15 +2,65 @@
 
 Repository for code backup from Microcontroller Practice Subject.
 
-## Testing Board 
-Arduino UNO R3 Atmega328P \
-ESP32 DEVKIT
+## 🧰 Hardware Requirements
 
-## Chapter
-Week 1: `lab-w1-*` PinSETUP, LED, if, (while,for) loop \
-Week 2: `lab-w2-*` RGB LED, Counter, AnalogRead \
-Week 3: `lab-w3-*` Interrupt \
-Week 4: `lab-w4-*` LCD 16x2, DHT22 Sensor, LDR \
-Week 5: `lab-w5-*` PIN Login with 4x4 Keypad, RFID Module \
-Week 6: `lab-w6-*` WiFi Connection, IP Configuration, Send and Receive data with TCP/IP \
-Week 7: `lab-w7-*` Send and Receive data with UDP/IP 
+Arduino UNO R3 Atmega328P (Week 1-5) \
+ESP32 (Week 6-7) \
+Cables and Breadboard \
+Various Components (see individual lab instructions)
+
+## 🗂️ Project Structure
+
+Each week's folder contains multiple labs with self-contained Arduino sketches.
+
+### Week-by-Week Topics
+
+| Week | Topics                        | Key Components          |
+| ---- | ----------------------------- | ----------------------- |
+| 1    | Pin setup, LED control, loops | LEDs, Push buttons      |
+| 2    | RGB LED, Analog reading       | RGB LED, Potentiometers |
+| 3    | Hardware interrupts           | 7-segment display       |
+| 4    | LCD display, Sensors          | LCD 16x2, DHT22, LDR    |
+| 5    | Input devices                 | 4x4 Keypad, RFID        |
+| 6    | WiFi networking (ESP32)       | TCP/IP communication    |
+| 7    | UDP networking (ESP32)        | UDP/IP communication    |
+
+## 🚀 Getting Started
+
+### 1. Hardware Setup
+
+See [COMPONENTS.md](./COMPONENTS.md) for required components.
+
+### 2. Software Setup
+
+#### Install Arduino IDE
+
+Download from [arduino.cc](https://www.arduino.cc/en/software)
+
+#### Install Required Libraries
+
+See [libraries.txt](./libraries.txt) for complete list.
+
+**Quick install via Arduino IDE:**
+
+1. Open Arduino IDE
+2. Go to: Sketch > Include Library > Manage Libraries
+3. Install libraries listed in `libraries.txt`
+
+**Or use Arduino CLI:**
+
+```bash
+arduino-cli lib install "LiquidCrystal_I2C"
+arduino-cli lib install "DHT sensor library"
+arduino-cli lib install "Adafruit Unified Sensor"
+arduino-cli lib install "Keypad"
+arduino-cli lib install "MFRC522"
+```
+
+## 📖 Usage
+
+1. Navigate to desired week folder (e.g., `src/week-01/lab1/`)
+2. Open `.ino` file in Arduino IDE
+3. Connect your Arduino/ESP32
+4. Select correct board and port
+5. Upload the sketch

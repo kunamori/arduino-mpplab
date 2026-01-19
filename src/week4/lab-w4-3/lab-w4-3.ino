@@ -21,7 +21,7 @@ void setup() {
   lcd.setCursor(10,1);
   lcd.print("   ");
   lcd.clear();
-  
+
   dht.begin();
 
 }

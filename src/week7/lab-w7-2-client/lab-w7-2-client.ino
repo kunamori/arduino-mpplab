@@ -19,7 +19,7 @@ String SENSOR_DATA;
 void setup() {
   Serial.begin(9600);
   WiFi.config(ip, gateway, subnet);
-  
+
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);

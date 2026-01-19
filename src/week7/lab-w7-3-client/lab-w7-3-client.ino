@@ -61,7 +61,7 @@ void loop() {
   a = map(a, 0, 4095, 0, 255);
   String ab = String(a);
 
-  if(millis()-time_out >= 1000){  
+  if(millis()-time_out >= 1000){
     time_out = millis();
     send_data("10_20&");
   }
