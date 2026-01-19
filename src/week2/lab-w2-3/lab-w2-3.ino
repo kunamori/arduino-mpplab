@@ -1,14 +1,15 @@
-// Define RGB LED Pinout
-// <-- Left     Right -->
-// Blue[9] Green [10] Red[11]
-#define LED_BLUE 9
-#define LED_GREEN 10
-#define LED_RED 11
+// Hardware Configuration - RGB LED Pins
+constexpr uint8_t LED_BLUE = 9;
+constexpr uint8_t LED_GREEN = 10;
+constexpr uint8_t LED_RED = 11;
 
-// Define RGB Variable
-int ERR_CODE = 0;
-int VAL_RGB[3] = {0,0,0};
-int i = 0;
+// RGB value constraints
+constexpr uint8_t RGB_MIN_VALUE = 0;
+constexpr uint8_t RGB_MAX_VALUE = 255;
+constexpr uint8_t RGB_COMPONENTS = 3;
+
+// RGB value storage
+uint8_t valRGB[RGB_COMPONENTS] = {0, 0, 0};
 
 void setup() {
   Serial.begin(9600);
@@ -17,28 +18,42 @@ void setup() {
   pinMode(LED_BLUE, OUTPUT);
 }
 
+bool parseRGBValues(const String& input) {
+  // Parse RGB values from format: R&G&B\n
+  const int firstSep = input.indexOf('&');
+  const int lastSep = input.lastIndexOf('&');
+  
+  if (firstSep == -1 || lastSep == -1 || firstSep == lastSep) {
+    return false;
+  }
+  
+  valRGB[0] = input.substring(0, firstSep).toInt();
+  valRGB[1] = input.substring(firstSep + 1, lastSep).toInt();
+  valRGB[2] = input.substring(lastSep + 1).toInt();
+  
+  // Validate RGB values
+  for(uint8_t i = 0; i < RGB_COMPONENTS; i++){
+    if(valRGB[i] > RGB_MAX_VALUE){
+      Serial.println(F("ERROR: Input more than 255."));
+      return false;
+    } 
+  }
+  
+  return true;
+}
+
+void setRGBLED(const uint8_t red, const uint8_t green, const uint8_t blue) {
+  analogWrite(LED_RED, red);
+  analogWrite(LED_GREEN, green);
+  analogWrite(LED_BLUE, blue);
+}
+
 void loop() {
   if(Serial.available() > 0){
-    // Spilt string by use `&`
-    String s = Serial.readStringUntil('N');
-    VAL_RGB[0] = s.substring(0, s.indexOf('&')).toInt();
-    VAL_RGB[1] = s.substring(s.indexOf('&') + 1, s.lastIndexOf('&')).toInt();
-    VAL_RGB[2] = s.substring(s.lastIndexOf('&') + 1).toInt();
-    // Reset Error State
-    ERR_CODE = 0;
-    // Detect Input Error
-    for(i = 0; i < 3; i++){
-      if(VAL_RGB[i] > 255 || VAL_RGB[i] < 0){
-        Serial.println("ERROR: Input more than 255 or negative number.");
-        ERR_CODE = 1;
-      } 
+    const String input = Serial.readStringUntil('N');
+    
+    if(parseRGBValues(input)){
+      setRGBLED(valRGB[0], valRGB[1], valRGB[2]);
     }
-    // if there is no error then run program.
-    if(ERR_CODE == 0){
-      analogWrite(LED_RED,VAL_RGB[0]);
-      analogWrite(LED_GREEN,VAL_RGB[1]);
-      analogWrite(LED_BLUE,VAL_RGB[2]);
-    }
-
   }
 }
