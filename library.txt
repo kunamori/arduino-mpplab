@@ -1,0 +1,71 @@
+# Arduino Libraries Required
+# Install these via Arduino IDE:  Tools > Manage Libraries
+# Or use Arduino CLI: arduino-cli lib install "Library Name"
+
+# ==============================================================================
+# INSTALLATION INSTRUCTIONS
+# ==============================================================================
+# 1. Open Arduino IDE
+# 2. Go to:  Sketch > Include Library > Manage Libraries
+# 3. Search for each library below and click "Install"
+# 4. Install the specific version mentioned (or latest if not specified)
+
+# ==============================================================================
+# REQUIRED LIBRARIES
+# ==============================================================================
+
+# LCD Display (I2C)
+LiquidCrystal_I2C by Frank de Brabander
+# Version: 1.1.4 or later
+# Used in: lab-w4-3, lab-w4-4
+
+# Temperature/Humidity Sensor
+DHT sensor library by Adafruit
+# Version: 1.4.4 or later
+# Requires:  Adafruit Unified Sensor (installed automatically)
+# Used in: lab-w4-3
+
+Adafruit Unified Sensor by Adafruit
+# Version:  1.1.6 or later
+# Dependency for DHT sensor library
+
+# Keypad
+Keypad by Mark Stanley, Alexander Brevig
+# Version: 3.1.1 or later
+# Used in:  lab-w5-1, lab-w5-2
+
+# RFID
+MFRC522 by GithubCommunity
+# Version: 1.4.10 or later
+# Used in:  lab-w5-2, lab-w5-3
+
+# Servo Motor
+Servo by Michael Margolis, Arduino
+# Version: Built-in (no installation needed)
+# Used in: lab-w5-1
+
+# WiFi (ESP32)
+WiFi by Arduino
+# Version: Built-in for ESP32 (no installation needed)
+# Used in: lab-w6-*, lab-w7-*
+
+# ==============================================================================
+# INSTALLATION VERIFICATION
+# ==============================================================================
+# To verify installation:
+# 1. Arduino IDE > Sketch > Include Library
+# 2. Check that libraries appear in the list
+# 3. Try compiling a lab sketch
+
+# ==============================================================================
+# TROUBLESHOOTING
+# ==============================================================================
+# If library not found:
+# - Check spelling matches exactly
+# - Try restarting Arduino IDE
+# - Check library manager filters (Type: All, Topic: All)
+#
+# If compilation errors:
+# - Update library to latest version
+# - Check library dependencies are installed
+# - Verify board is selected correctly
