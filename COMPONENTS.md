@@ -2,19 +2,15 @@
 
 Complete list of all components needed for this course.
 
-### Microcontrollers
+## Microcontrollers
 
 - [ ] Arduino UNO R3 Atmega328P × 1
 - [ ] ESP32 DEVKIT × 1
 
-### Week 1-3: Basics & Digital I/O
+### Week 1: Basics
 
 - [ ] LEDs (5mm, various colors) × 6
-- [ ] Push buttons × 2
-- [ ] Resistors 220Ω × 2
-- [ ] Variable Resistors 10kΩ × 1
-- [ ] Buzzer × 1
-- [ ] 7-Segment Display (Common Anode) × 1
+- [ ] Resistors 220Ω × 1
 
 ### Week 2: Analog I/O
 
@@ -22,29 +18,44 @@ Complete list of all components needed for this course.
 - [ ] Resistors 220Ω × 1
 - [ ] Potentiometer 10kΩ × 2
 
+### Week 3: Interrupts & Displays
+
+- [ ] Push buttons × 2
+- [ ] Resistors 220Ω × 2
+- [ ] Capacitors 0.001μF × 2
+- [ ] Variable Resistors 10kΩ × 1
+- [ ] 7-Segment Display (Common Anode) × 1
+
 ### Week 4: Sensors & Display
 
 - [ ] LCD 16×2 with I2C module × 1
 - [ ] DHT22 Temperature/Humidity Sensor × 1
+- [ ] Variable Resistors 10kΩ × 1
 - [ ] LDR (Light Dependent Resistor) × 1
 
 ### Week 5: Input Devices
 
 - [ ] 4×4 Matrix Keypad × 1
-- [ ] RFID-RC522 Module × 1
+- [ ] Push buttons × 2
+- [ ] RFID-RFRC522 Module × 1
 - [ ] RFID Tags/Cards × 1-2
-- [ ] Servo Motor (SG90) × 1
+- [ ] Servo Motor (SG90S) × 1
+- [ ] LCD 16×2 with I2C module × 1
 
-### Week 6-7: Networking (ESP32)
+### Week 6: Networking (ESP32)
 
-- [ ] WiFi network access
-- [ ] USB cable for ESP32
+- [ ] Push buttons × 2
+- [ ] Relay 2 Channel Module × 1
+- [ ] Servo Motor (SG90S) × 1
 
-### Week 6-7: Networking (ESP32)
+### Week 7: Networking (ESP32)
 
-- [ ] WiFi network access
 - [ ] RGB LED × 1
-- [ ] USB cable for ESP32
+- [ ] LEDs (5mm, various colors) × 6
+- [ ] Resistors 220Ω × 1
+- [ ] DHT22 Temperature/Humidity Sensor × 1
+- [ ] Variable Resistors 10kΩ × 1
+- [ ] Push buttons × 1
 
 ### General Supplies
 
