@@ -1,24 +1,27 @@
 #include <Keypad.h>
 #include <Servo.h>
 
-#define Buzzer A1
+// Hardware Configuration
+constexpr uint8_t BUZZER_PIN = A1;
+constexpr uint8_t SERVO_PIN = A0;
 
-// Setup Servo
-#define ServoPin A0
-Servo myServo; 
+// Keypad Configuration
+constexpr uint8_t KEYPAD_ROWS = 4;
+constexpr uint8_t KEYPAD_COLS = 4;
+constexpr uint8_t PIN_LENGTH = 4;
 
-// Metrix Table Configuration.
-const byte ROWS = 4;
-const byte COLS = 4;
+// Servo Configuration
+constexpr uint8_t SERVO_LOCKED = 0;
+constexpr uint8_t SERVO_UNLOCKED = 180;
+constexpr uint16_t UNLOCK_DURATION_MS = 1000;
+constexpr uint16_t BUZZER_BEEP_MS = 500;
 
-// PIN Configuration.
-const int maxPIN = 4; // Maximum of PIN Numbers
-const char setPIN[maxPIN] = {'3', '6', '2', '9'}; 
-char inputPIN[maxPIN];
-
+// PIN Configuration
+const char CORRECT_PIN[PIN_LENGTH] = {'3', '6', '2', '9'};
+char inputPIN[PIN_LENGTH];
 
 // Keypad Mapping Matrix
-char keys[ROWS][COLS] = {
+const char KEYS[KEYPAD_ROWS][KEYPAD_COLS] = {
   {'1','2','3','A'},
   {'4','5','6','B'},
   {'7','8','9','C'},
@@ -26,43 +29,64 @@ char keys[ROWS][COLS] = {
 };
 
 // Keypad Pin Configuration
-byte rowPins[ROWS] = {9, 8, 7, 6};
-byte colPins[COLS] = {5, 4, 3, 2};
+const uint8_t ROW_PINS[KEYPAD_ROWS] = {9, 8, 7, 6};
+const uint8_t COL_PINS[KEYPAD_COLS] = {5, 4, 3, 2};
 
-// Create Keypad Function. 
-Keypad keypad = Keypad(makeKeymap(keys), rowPins,colPins,ROWS,COLS);
+// Create Keypad and Servo objects
+Keypad keypad = Keypad(makeKeymap(KEYS), ROW_PINS, COL_PINS, KEYPAD_ROWS, KEYPAD_COLS);
+Servo doorServo;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(Buzzer, OUTPUT);
-  myServo.attach(ServoPin);
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+  doorServo.attach(SERVO_PIN);
+  doorServo.write(SERVO_LOCKED);
 }
 
-int i;
+void unlockDoor() {
+  Serial.println(F("INFO: PIN Correct!!"));
+  doorServo.write(SERVO_UNLOCKED);
+  delay(UNLOCK_DURATION_MS);
+  doorServo.write(SERVO_LOCKED);
+}
 
-void loop() {
-  int state = 0;
-  myServo.write(0);
-  Serial.print("PIN INPUT: ");
-  for (i=0; i < maxPIN;){
-    char key = keypad.getKey();
-    if (key != NO_KEY){
+void soundAlarm() {
+  Serial.println(F("ERROR: PIN Incorrect."));
+  digitalWrite(BUZZER_PIN, HIGH);
+  delay(BUZZER_BEEP_MS);
+  digitalWrite(BUZZER_PIN, LOW);
+  delay(BUZZER_BEEP_MS);
+}
+
+void readPINFromKeypad() {
+  Serial.print(F("PIN INPUT: "));
+  
+  for (uint8_t i = 0; i < PIN_LENGTH; ) {
+    const char key = keypad.getKey();
+    
+    if (key != NO_KEY) {
       inputPIN[i] = key;
       Serial.print(inputPIN[i]);
       i++;
     }
   }
-  Serial.println("");
-  if(strncmp(inputPIN, setPIN, maxPIN) == 0){
-    Serial.println("INFO: PIN Correct!!");
-    myServo.write(180);
-    delay(1000);
-  }else{
-    Serial.println("ERROR: PIN Incorrect.");
-    digitalWrite(Buzzer, HIGH);
-    delay(500);
-    digitalWrite(Buzzer, LOW);
-    delay(500);
+  
+  Serial.println();
+}
 
+bool verifyPIN() {
+  return (strncmp(inputPIN, CORRECT_PIN, PIN_LENGTH) == 0);
+}
+
+void loop() {
+  doorServo.write(SERVO_LOCKED);
+  
+  readPINFromKeypad();
+  
+  if (verifyPIN()) {
+    unlockDoor();
+  } else {
+    soundAlarm();
   }
 }

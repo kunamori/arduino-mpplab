@@ -1,71 +1,74 @@
-// Define LED Pinout
-// <-- Left    Right -->
-//    10 9 8 7 6 5 [4] <- Buzzer
-#define LED_1 10
-#define LED_2 9
-#define LED_3 8
-#define LED_4 7
-#define LED_5 6
-#define LED_6 5
+// Hardware Configuration - LED Pins
+constexpr uint8_t LED_1 = 10;
+constexpr uint8_t LED_2 = 9;
+constexpr uint8_t LED_3 = 8;
+constexpr uint8_t LED_4 = 7;
+constexpr uint8_t LED_5 = 6;
+constexpr uint8_t LED_6 = 5;
+constexpr uint8_t BUZZER_PIN = 4;
 
-// Define Buzzer Pinout.
-#define Buzzer 4
+// LED Configuration
+constexpr uint8_t NUMBER_LED = 6;
+constexpr uint16_t BUZZER_BEEP_MS = 100;
 
-// Define Number of LED.
-int NUMBER_LED = 6;
+// LED pin array
+const uint8_t LED_PINS[NUMBER_LED] = {LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
 
-// Define array for storing LED status.
-int ledStatus[] = {0,0,0,0,0,0,0};
+// State arrays
+bool ledStatus[NUMBER_LED] = {false};
 
-// Array for Registor into Function "PinMode".
-int ledPins[] = { LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
+void initializePins() {
+  for (uint8_t i = 0; i < NUMBER_LED; i++) {
+    pinMode(LED_PINS[i], OUTPUT);
+    digitalWrite(LED_PINS[i], LOW);
+  }
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+}
 
-// Define global for selected led variable.
-int selLED;
+void beepBuzzer() {
+  digitalWrite(BUZZER_PIN, HIGH);
+  delay(BUZZER_BEEP_MS);
+  digitalWrite(BUZZER_PIN, LOW);
+  delay(BUZZER_BEEP_MS);
+}
+
+void toggleLED(const uint8_t ledIndex) {
+  if (ledStatus[ledIndex]) {
+    digitalWrite(LED_PINS[ledIndex], LOW);
+    ledStatus[ledIndex] = false;
+    Serial.print(F("LED: "));
+    Serial.print(ledIndex + 1);
+    Serial.println(F(" OFF"));
+  } else {
+    digitalWrite(LED_PINS[ledIndex], HIGH);
+    ledStatus[ledIndex] = true;
+    Serial.print(F("LED: "));
+    Serial.print(ledIndex + 1);
+    Serial.println(F(" ON"));
+  }
+}
+
+void processSerialInput() {
+  const String input = Serial.readStringUntil('\n');
+  const uint8_t selectedLED = input.toInt();
+  
+  beepBuzzer();
+  
+  if (selectedLED >= 1 && selectedLED <= NUMBER_LED) {
+    toggleLED(selectedLED - 1);
+  } else {
+    Serial.println(F("ERROR: INPUT_USER"));
+  }
+}
 
 void setup() {
   Serial.begin(9600);
-  // for loop for registor pinMode.
-  for (int i = 0; i < NUMBER_LED; i++) {
-    pinMode(ledPins[i], OUTPUT);
-  }
-  // Register Buzzer Pinout
-  pinMode(Buzzer, OUTPUT);
+  initializePins();
 }
 
 void loop() {
   if (Serial.available() > 0) {
-      // Reading Input
-      String input = Serial.readStringUntil('\n');
-
-      //  Send buzzer signal when get input
-      digitalWrite(Buzzer, HIGH);
-      delay(100);
-      digitalWrite(Buzzer, LOW);
-      delay(100);
-
-      // String -> int
-      selLED = input.toInt();
-
-      // checking status array, turn on/off then update status in array.
-      if (selLED >= 1 and selLED <= NUMBER_LED){
-        if (ledStatus[(selLED - 1)] == 0){
-          digitalWrite(ledPins[(selLED - 1)], HIGH);
-          ledStatus[(selLED - 1)] = 1;
-          Serial.print("LED: ");
-          Serial.print(input);
-          Serial.println(" ON");
-        } else if (ledStatus[selLED - 1] == 1){
-          digitalWrite(ledPins[(selLED - 1)], LOW);
-          ledStatus[(selLED - 1)] = 0;
-          Serial.print("LED: ");
-          Serial.print(input);
-          Serial.println(" OFF");
-        }
-        // Send status on serial monitor
-      }else{
-        // Print error when input string or number greater than NUMBER_LED
-        Serial.println("ERROR: INPUT_USER");
-      }
-  } 
+    processSerialInput();
+  }
 }

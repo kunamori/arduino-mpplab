@@ -1,11 +1,40 @@
-// Define Push Button
-#define PUSH_SW_1 2
-#define PUSH_SW_2 3
+// Hardware Configuration - Push Buttons
+constexpr uint8_t PUSH_SW_1 = 2;
+constexpr uint8_t PUSH_SW_2 = 3;
 
-// Define Counter, State
-// state_sw [0] current state, [1] new state;
-int state_sw[4] = {0,0,0,0};
-int counter = 0;
+// Counter Configuration
+constexpr uint8_t COUNTER_MIN = 0;
+constexpr uint8_t COUNTER_MAX = 99;
+constexpr uint8_t DEBOUNCE_DELAY_MS = 50;
+
+// State variables
+struct ButtonState {
+  uint8_t currentState;
+  uint8_t lastState;
+};
+
+ButtonState button1 = {0, 0};
+ButtonState button2 = {0, 0};
+uint8_t counter = 0;
+
+void handleButtonPress(const uint8_t pin, ButtonState& btnState, const bool increment) {
+  btnState.currentState = digitalRead(pin);
+  
+  if (btnState.lastState != btnState.currentState) {
+    delay(DEBOUNCE_DELAY_MS);
+    
+    if (digitalRead(pin) == LOW) {
+      if (increment) {
+        counter = (counter == COUNTER_MAX) ? COUNTER_MIN : counter + 1;
+      } else {
+        counter = (counter == COUNTER_MIN) ? COUNTER_MAX : counter - 1;
+      }
+      Serial.println(counter);
+    }
+  }
+  
+  btnState.lastState = btnState.currentState;
+}
 
 void setup() {
   Serial.begin(9600);
@@ -14,40 +43,6 @@ void setup() {
 }
 
 void loop() {
-  // Implement for Switch 1 / increment value
-  state_sw[0] = digitalRead(PUSH_SW_1);
-  if(state_sw[1] != state_sw[0]){
-    // delay for deboucing signal
-    delay(50);
-    if(digitalRead(PUSH_SW_1) == 0){
-      // when push button at counter = 99 then reset to 0
-      if(counter == 99){
-        counter = 0;
-      }else{
-        counter++;
-      }
-      Serial.println(counter);
-    }
-  }
-  // set new state
-  state_sw[1] = state_sw[0];
-
-  // Implement for Switch 2 / decrement value
-  state_sw[2] = digitalRead(PUSH_SW_2);
-  if(state_sw[3] != state_sw[2]){
-    // delay for deboucing signal
-    delay(50);
-    if(digitalRead(PUSH_SW_2) == 0){
-      // when push button at counter = 0 then return to 99
-      if(counter == 0){
-        counter = 99;
-      }
-      else{
-        counter--;
-      }
-      Serial.println(counter);
-    }
-  }
-  // set new state
-  state_sw[3] = state_sw[2];
+  handleButtonPress(PUSH_SW_1, button1, true);   // Increment
+  handleButtonPress(PUSH_SW_2, button2, false);  // Decrement
 }

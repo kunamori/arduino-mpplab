@@ -1,66 +1,84 @@
 #include <WiFi.h>
 
-bool state1=1,lastState1=1;
-bool state2=1,lastState2=1;
-int x=0;
+// Hardware Configuration - Button Pins
+constexpr uint8_t BUTTON_UP = 5;
+constexpr uint8_t BUTTON_DOWN = 4;
 
-// Wifi credentials
-char *ssid = "ESP32-Nihahaha";
-char *passwd = "12345678";
-const uint16_t port = 6969;
-char *host = "192.168.4.1";
-WiFiClient client; // create wifi client object
+// Counter Configuration
+constexpr uint8_t COUNTER_MIN = 0;
+constexpr uint8_t COUNTER_MAX = 99;
+constexpr uint8_t DEBOUNCE_DELAY_MS = 20;
+
+// WiFi Configuration
+const char* WIFI_SSID = "ESP32-Nihahaha";
+const char* WIFI_PASSWORD = "12345678";
+const char* SERVER_HOST = "192.168.4.1";
+constexpr uint16_t SERVER_PORT = 6969;
+constexpr uint16_t WIFI_CONNECT_DELAY_MS = 1000;
+
+// State variables
+struct ButtonState {
+  bool current;
+  bool last;
+};
+
+ButtonState button1 = {true, true};
+ButtonState button2 = {true, true};
+uint8_t counter = 0;
+
+WiFiClient client;
+
+void connectToWiFi() {
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(WIFI_CONNECT_DELAY_MS);
+    Serial.println(F("Connecting to WiFi..."));
+  }
+  
+  Serial.println(F("Connected to WiFi"));
+}
+
+void sendCounterToServer(const uint8_t value) {
+  if (client.connect(SERVER_HOST, SERVER_PORT)) {
+    client.print(String(value) + "&");
+    client.flush();
+    client.stop();
+  }
+}
+
+void handleButton(const uint8_t pin, ButtonState& btnState, const bool increment) {
+  btnState.current = digitalRead(pin);
+  
+  if (btnState.current != btnState.last) {
+    delay(DEBOUNCE_DELAY_MS);
+    
+    if (digitalRead(pin) == LOW) {
+      if (increment) {
+        counter = (counter >= COUNTER_MAX) ? COUNTER_MIN : counter + 1;
+      } else {
+        counter = (counter <= COUNTER_MIN) ? COUNTER_MAX : counter - 1;
+      }
+      
+      sendCounterToServer(counter);
+    }
+  }
+  
+  btnState.last = btnState.current;
+}
 
 void setup() {
   Serial.begin(9600);
-
-  WiFi.begin(ssid, passwd);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
-  }
-
-  pinMode(4, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
+  
+  pinMode(BUTTON_UP, INPUT_PULLUP);
+  pinMode(BUTTON_DOWN, INPUT_PULLUP);
+  
+  connectToWiFi();
 }
 
 void loop() {
-
-  state1=digitalRead(5); // read button state
-  if(state1!=lastState1){
-      delay(20); //debounce
-      if(digitalRead(5)==0){
-        x++;
-        if(x>99){ // if exceeds 2 digits, reset to 0
-          x=0;
-        }
-        if (client.connect(host, port)) {
-          
-          client.print(String(x)+"&");
-          client.flush();
-          client.stop();
-        }
-      }
-  }
-  lastState1=state1;
-
-  state2=digitalRead(4); // read button state
-  if(state2!=lastState2){
-      delay(20); //debounce
-      if(digitalRead(4)==0){
-        x--;
-        if(x<0){ // if below 0, reset to 99
-          x=99;
-      }
-      if (client.connect(host, port)) {
-        client.print(String(x)+"&");
-        client.flush();
-        client.stop();
-      }
-    }
-  }
-  lastState2=state2;
-
-  Serial.println(x); // for debugging
-
+  handleButton(BUTTON_UP, button1, true);    // Increment
+  handleButton(BUTTON_DOWN, button2, false); // Decrement
+  
+  Serial.println(counter);
 }

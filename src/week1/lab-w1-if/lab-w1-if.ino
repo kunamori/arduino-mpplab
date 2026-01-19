@@ -1,74 +1,74 @@
-// Define LED Pinout
-// <-- Left    Right -->
-//    10 9 8 7 6 5 [4] <- Buzzer
-#define LED_1 10
-#define LED_2 9
-#define LED_3 8
-#define LED_4 7
-#define LED_5 6
-#define LED_6 5
+// Hardware Configuration - LED Pins
+constexpr uint8_t LED_1 = 10;
+constexpr uint8_t LED_2 = 9;
+constexpr uint8_t LED_3 = 8;
+constexpr uint8_t LED_4 = 7;
+constexpr uint8_t LED_5 = 6;
+constexpr uint8_t LED_6 = 5;
+constexpr uint8_t BUZZER_PIN = 4;
 
-// define Buzzer Pinout.
-#define Buzzer 4
+// LED Configuration
+constexpr uint8_t NUMBER_LED = 6;
+constexpr uint16_t DELAY_MS = 500;
 
-// define Number of LED.
-int NUMBER_LED = 6;
+const uint8_t LED_PINS[NUMBER_LED] = {LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
 
-// array for Registor into Function "PinMode".
-int ledPins[] = { LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
+// State variable for sequencing
+uint8_t currentStep = 1;
 
-// define global variable
-int i = 1;
+void initializePins() {
+  for (uint8_t i = 0; i < NUMBER_LED; i++) {
+    pinMode(LED_PINS[i], OUTPUT);
+    digitalWrite(LED_PINS[i], LOW);
+  }
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+}
+
+void beepBuzzer() {
+  digitalWrite(BUZZER_PIN, HIGH);
+  delay(DELAY_MS);
+  digitalWrite(BUZZER_PIN, LOW);
+  delay(DELAY_MS);
+}
+
+void turnOffAllLEDs() {
+  for (uint8_t i = 0; i < NUMBER_LED; i++) {
+    digitalWrite(LED_PINS[i], LOW);
+  }
+}
 
 void setup() {
-  // start serial daemon
   Serial.begin(9600);
-
-  // for loop for registor pinMode.
-  for (int i = 0; i < NUMBER_LED; i++) {
-    pinMode(ledPins[i], OUTPUT);
-  }
-
-  // Register Buzzer Pinout
-  pinMode(Buzzer, OUTPUT);
-
+  initializePins();
 }
 
 void loop() {
-  if (i == 1){
-    digitalWrite(LED_1,HIGH);
+  // Turn on LEDs sequentially using if statements
+  if (currentStep == 1) {
+    digitalWrite(LED_1, HIGH);
   }
-  if (i == 2){
-    digitalWrite(LED_2,HIGH);
+  if (currentStep == 2) {
+    digitalWrite(LED_2, HIGH);
   }
-  if (i == 3){
-    digitalWrite(LED_3,HIGH);
+  if (currentStep == 3) {
+    digitalWrite(LED_3, HIGH);
   }
-  if (i == 4){
-    digitalWrite(LED_4,HIGH);
+  if (currentStep == 4) {
+    digitalWrite(LED_4, HIGH);
   }
-  if (i == 5){
-    digitalWrite(LED_5,HIGH);
+  if (currentStep == 5) {
+    digitalWrite(LED_5, HIGH);
   }
-  if (i == 6){
-    digitalWrite(LED_6,HIGH);
+  if (currentStep == 6) {
+    digitalWrite(LED_6, HIGH);
   }
-  if (i == 7){
-    // turn off all LEDs
-    digitalWrite(LED_1,LOW);
-    digitalWrite(LED_2,LOW);
-    digitalWrite(LED_3,LOW);
-    digitalWrite(LED_4,LOW);
-    digitalWrite(LED_5,LOW);
-    digitalWrite(LED_6,LOW);
-    i = 0; // reset to 0
+  if (currentStep == 7) {
+    // Turn off all LEDs and reset
+    turnOffAllLEDs();
+    currentStep = 0;
   }
   
-  // buzzer working after do action
-  digitalWrite(Buzzer, HIGH);
-  delay(500);
-  digitalWrite(Buzzer, LOW);
-  delay(500);
-
-  i++;
+  beepBuzzer();
+  currentStep++;
 }
