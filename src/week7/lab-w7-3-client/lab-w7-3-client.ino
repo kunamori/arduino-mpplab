@@ -1,84 +1,133 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-// Wifi credentials
-const char* ssid = "ESP32-Nihahaha";
-const char* password = "12345678";
-const uint16_t port = 6969;
-char *host = "192.168.4.1";
+// Hardware Configuration
+constexpr uint8_t BUTTON_PIN = 4;
+constexpr uint8_t POTENTIOMETER_PIN = 34;
+
+// ADC Configuration (ESP32 12-bit ADC)
+constexpr uint16_t ADC_MAX_VALUE = 4095;
+constexpr uint8_t RGB_MIN_VALUE = 0;
+constexpr uint8_t RGB_MAX_VALUE = 255;
+constexpr uint8_t RGB_CHANNELS = 3;
+
+// WiFi Configuration
+const char* WIFI_SSID = "ESP32-Nihahaha";
+const char* WIFI_PASSWORD = "12345678";
+const char* SERVER_HOST = "192.168.4.1";
+constexpr uint16_t UDP_PORT = 6969;
+
+// Static IP Configuration
+const IPAddress STATIC_IP(192, 168, 4, 5);
+const IPAddress GATEWAY(192, 168, 4, 1);
+const IPAddress SUBNET(255, 255, 255, 0);
+
+// Timing Configuration
+constexpr uint16_t HEARTBEAT_INTERVAL_MS = 1000;
+constexpr uint8_t DEBOUNCE_DELAY_MS = 20;
+constexpr uint16_t LOOP_DELAY_MS = 10;
+constexpr uint16_t WIFI_CONNECT_DELAY_MS = 1000;
+constexpr uint16_t PACKET_BUFFER_SIZE = 255;
+
 WiFiUDP udp;
 
-// IP Configuration
-IPAddress ip(192,168,4,5);
-IPAddress gateway(192,168,4,1);
-IPAddress subnet(255,255,255,0);
-unsigned long time_out = 0;
+// State variables
+struct ButtonState {
+  bool current;
+  bool last;
+};
 
-String selRGB = "0";
-int selRGB_BTN = 0;
-bool state1=1,lastState1=1;
+ButtonState button = {true, true};
+uint8_t selectedRGBChannel = 0;
+unsigned long lastHeartbeatTime = 0;
 
-void setup() {
-  Serial.begin(9600);
-
-  WiFi.config(ip, gateway, subnet);
-  WiFi.begin(ssid, password);
+void connectToWiFi() {
+  WiFi.config(STATIC_IP, GATEWAY, SUBNET);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  
   while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
+    delay(WIFI_CONNECT_DELAY_MS);
+    Serial.println(F("Connecting to WiFi..."));
   }
+  
+  Serial.println(F("Connected to WiFi"));
   Serial.println(WiFi.localIP());
-  udp.begin(port);
-
-  pinMode(4, INPUT_PULLUP);
 }
 
-void send_data(String message) {
-  udp.beginPacket(host, port);
-  char char_message[255];
-  sprintf(char_message, "%s", message.c_str());
-  udp.print(char_message);
+void sendUDPMessage(const String& message) {
+  char messageBuffer[PACKET_BUFFER_SIZE];
+  snprintf(messageBuffer, PACKET_BUFFER_SIZE, "%s", message.c_str());
+  
+  udp.beginPacket(SERVER_HOST, UDP_PORT);
+  udp.print(messageBuffer);
   udp.flush();
   udp.endPacket();
 }
 
-void loop() {
-  state1=digitalRead(4);
-  if(state1!=lastState1){
-      delay(20); //debounce
-      if(digitalRead(4)==0){
-        selRGB_BTN++;
-        if(selRGB_BTN>2){
-          selRGB_BTN=0;
-        }
-      }
+void handleChannelButton() {
+  button.current = digitalRead(BUTTON_PIN);
+  
+  if (button.current != button.last) {
+    delay(DEBOUNCE_DELAY_MS);
+    
+    if (digitalRead(BUTTON_PIN) == LOW) {
+      selectedRGBChannel = (selectedRGBChannel + 1) % RGB_CHANNELS;
+      Serial.print(F("Selected RGB Channel: "));
+      Serial.println(selectedRGBChannel);
+    }
   }
-  lastState1=state1;
-  Serial.println(selRGB_BTN);
-  selRGB = String(selRGB_BTN);
+  
+  button.last = button.current;
+}
 
-  int a = analogRead(34);
-  a = map(a, 0, 4095, 0, 255);
-  String ab = String(a);
+uint8_t readPotentiometerValue() {
+  const uint16_t adcValue = analogRead(POTENTIOMETER_PIN);
+  return map(adcValue, 0, ADC_MAX_VALUE, RGB_MIN_VALUE, RGB_MAX_VALUE);
+}
 
-  if(millis()-time_out >= 1000){  
-    time_out = millis();
-    send_data("10_20&");
-  }
-
-  int numbuffer = udp.parsePacket();
-  if (numbuffer > 0) {
-    char packetBuffer[255];
-    int len = udp.read(packetBuffer, 255);
+void processUDPResponse() {
+  const int numBytes = udp.parsePacket();
+  
+  if (numBytes > 0) {
+    char packetBuffer[PACKET_BUFFER_SIZE];
+    const int len = udp.read(packetBuffer, PACKET_BUFFER_SIZE - 1);
+    
     if (len > 0) {
       packetBuffer[len] = '\0';
-      String s(packetBuffer);
-
-      if (s == "A") {
-        send_data(selRGB+"_"+ab+"&");
-        time_out = millis();
+      const String response(packetBuffer);
+      
+      if (response == "A") {
+        const uint8_t brightness = readPotentiometerValue();
+        const String message = String(selectedRGBChannel) + "_" + String(brightness) + "&";
+        sendUDPMessage(message);
+        lastHeartbeatTime = millis();
       }
     }
   }
-  delay(10);
+}
+
+void sendHeartbeat() {
+  const unsigned long currentTime = millis();
+  
+  if (currentTime - lastHeartbeatTime >= HEARTBEAT_INTERVAL_MS) {
+    lastHeartbeatTime = currentTime;
+    sendUDPMessage("10_20&");
+  }
+}
+
+void setup() {
+  Serial.begin(9600);
+  
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  
+  connectToWiFi();
+  udp.begin(UDP_PORT);
+}
+
+void loop() {
+  handleChannelButton();
+  sendHeartbeat();
+  processUDPResponse();
+  
+  delay(LOOP_DELAY_MS);
 }

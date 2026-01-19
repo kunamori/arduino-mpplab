@@ -1,46 +1,49 @@
-// Define Push Button
-#define PUSH_SW_1 2
-#define PUSH_SW_2 3
+// Hardware Configuration - Push Buttons
+constexpr uint8_t PUSH_SW_1 = 2;
+constexpr uint8_t PUSH_SW_2 = 3;
 
-int counter = 0;
-int o_counter = 0;
-unsigned long t = 0;
+// Counter Configuration
+constexpr uint8_t COUNTER_MIN = 0;
+constexpr uint8_t COUNTER_MAX = 99;
+constexpr uint16_t DEBOUNCE_DELAY_MS = 200;
+
+// State variables
+volatile uint8_t counter = 0;
+uint8_t oldCounter = 0;
+volatile unsigned long lastInterruptTime = 0;
+
+void incrementCounter() {
+  const unsigned long currentTime = millis();
+  
+  // Debouncing
+  if (currentTime - lastInterruptTime > DEBOUNCE_DELAY_MS) {
+    lastInterruptTime = currentTime;
+    counter = (counter == COUNTER_MAX) ? COUNTER_MIN : counter + 1;
+  }
+}
+
+void decrementCounter() {
+  const unsigned long currentTime = millis();
+  
+  // Debouncing
+  if (currentTime - lastInterruptTime > DEBOUNCE_DELAY_MS) {
+    lastInterruptTime = currentTime;
+    counter = (counter == COUNTER_MIN) ? COUNTER_MAX : counter - 1;
+  }
+}
 
 void setup() {
   Serial.begin(9600);
   pinMode(PUSH_SW_1, INPUT_PULLUP);
   pinMode(PUSH_SW_2, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(PUSH_SW_1), count_func_i, FALLING);
-  attachInterrupt(digitalPinToInterrupt(PUSH_SW_2), count_func_d, FALLING);
-}
-
-void count_func_i(){
-  if(millis()-t>200){
-    t=millis();
-    if(counter == 99){
-      counter = 0;
-    }
-    else{
-      counter++;
-    }
-  }
-}
-
-void count_func_d(){
-  if(millis()-t>200){
-    t=millis();
-    if(counter == 0){
-      counter = 99;
-    }
-    else{
-      counter--;
-    }
-  }
+  
+  attachInterrupt(digitalPinToInterrupt(PUSH_SW_1), incrementCounter, FALLING);
+  attachInterrupt(digitalPinToInterrupt(PUSH_SW_2), decrementCounter, FALLING);
 }
 
 void loop() {
-  if(counter != o_counter){
+  if (counter != oldCounter) {
     Serial.println(counter);
-    o_counter=counter;
+    oldCounter = counter;
   }
 }

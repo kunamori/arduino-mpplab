@@ -1,80 +1,80 @@
 #include <WiFi.h>
 
-// debounce variables
-bool state1=1,lastState1=1;
-bool state2=1,lastState2=1;
+// Hardware Configuration - Button Pins
+constexpr uint8_t BUTTON_1 = 5;
+constexpr uint8_t BUTTON_2 = 4;
 
-// relay state variables
-char state_relay[2] = {0,0};
+// Debounce Configuration
+constexpr uint8_t DEBOUNCE_DELAY_MS = 20;
 
-// Wifi credentials
-char *ssid = "ESP32-Nihahaha";
-char *passwd = "12345678";
-const uint16_t port = 6969;
-char *host = "192.168.4.1";
+// WiFi Configuration
+const char* WIFI_SSID = "ESP32-Nihahaha";
+const char* WIFI_PASSWORD = "12345678";
+const char* SERVER_HOST = "192.168.4.1";
+constexpr uint16_t SERVER_PORT = 6969;
+constexpr uint16_t WIFI_CONNECT_DELAY_MS = 1000;
+
+// State variables
+struct ButtonState {
+  bool current;
+  bool last;
+};
+
+ButtonState button1 = {true, true};
+ButtonState button2 = {true, true};
+bool relayState[2] = {false, false};
+
 WiFiClient client;
+
+void connectToWiFi() {
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(WIFI_CONNECT_DELAY_MS);
+    Serial.println(F("Connecting to WiFi..."));
+  }
+  
+  Serial.println(F("Connected to WiFi"));
+}
+
+void sendRelayCommand(const char* command) {
+  if (client.connect(SERVER_HOST, SERVER_PORT)) {
+    client.print(command);
+    client.flush();
+    client.stop();
+  }
+}
+
+void handleButton(const uint8_t pin, ButtonState& btnState, const uint8_t relayIndex) {
+  btnState.current = digitalRead(pin);
+  
+  if (btnState.current != btnState.last) {
+    delay(DEBOUNCE_DELAY_MS);
+    
+    if (digitalRead(pin) == LOW) {
+      if (relayState[relayIndex]) {
+        sendRelayCommand(relayIndex == 0 ? "OFF1&" : "OFF2&");
+        relayState[relayIndex] = false;
+      } else {
+        sendRelayCommand(relayIndex == 0 ? "ON1&" : "ON2&");
+        relayState[relayIndex] = true;
+      }
+    }
+  }
+  
+  btnState.last = btnState.current;
+}
 
 void setup() {
   Serial.begin(9600);
-
-  WiFi.begin(ssid, passwd);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
-  }
-
-  pinMode(4, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
+  
+  pinMode(BUTTON_1, INPUT_PULLUP);
+  pinMode(BUTTON_2, INPUT_PULLUP);
+  
+  connectToWiFi();
 }
 
 void loop() {
-  state1=digitalRead(5); // read button state
-  if(state1!=lastState1){
-    delay(20); //debounce
-    if(digitalRead(5)==0){
-      if (state_relay[0] == 0){
-        if (client.connect(host, port)) {
-          
-          client.print("ON1&");
-          client.flush();
-          client.stop();
-        }
-        state_relay[0] = 1;
-      }
-      else{
-        if (client.connect(host, port)) {
-          client.print("OFF1&");
-          client.flush();
-          client.stop();
-        }
-        state_relay[0] = 0;
-      }
-    }
-  }
-  lastState1=state1;
-
-  state2=digitalRead(4); // read button state
-  if(state2!=lastState2){
-    delay(20); //debounce
-    if(digitalRead(4)==0){
-      if (state_relay[1] == 0){
-        if (client.connect(host, port)) {
-          
-          client.print("ON2&");
-          client.flush();
-          client.stop();
-        }
-        state_relay[1] = 1;
-      }
-      else{
-        if (client.connect(host, port)) {
-          client.print("OFF2&");
-          client.flush();
-          client.stop();
-        }
-        state_relay[1] = 0;
-      }
-    }
-  }
-  lastState2=state2;
+  handleButton(BUTTON_1, button1, 0);  // Control Relay 1
+  handleButton(BUTTON_2, button2, 1);  // Control Relay 2
 }

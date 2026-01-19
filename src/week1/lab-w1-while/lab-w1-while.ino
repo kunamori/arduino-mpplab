@@ -1,59 +1,60 @@
-// Define LED Pinout
-// <-- Left    Right -->
-//    10 9 8 7 6 5 [4] <- Buzzer
-#define LED_1 10
-#define LED_2 9
-#define LED_3 8
-#define LED_4 7
-#define LED_5 6
-#define LED_6 5
+// Hardware Configuration - LED Pins
+constexpr uint8_t LED_1 = 10;
+constexpr uint8_t LED_2 = 9;
+constexpr uint8_t LED_3 = 8;
+constexpr uint8_t LED_4 = 7;
+constexpr uint8_t LED_5 = 6;
+constexpr uint8_t LED_6 = 5;
+constexpr uint8_t BUZZER_PIN = 4;
 
-// Define Buzzer Pinout.
-#define Buzzer 4
+// LED Configuration
+constexpr uint8_t NUMBER_LED = 6;
+constexpr uint16_t DELAY_MS = 500;
 
-// Define Number of LED.
-int NUMBER_LED = 6;
+const uint8_t LED_PINS[NUMBER_LED] = {LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
 
-// Array for Registor into Function "PinMode".
-int ledPins[] = { LED_1, LED_2, LED_3, LED_4, LED_5, LED_6};
+void initializePins() {
+  for (uint8_t i = 0; i < NUMBER_LED; i++) {
+    pinMode(LED_PINS[i], OUTPUT);
+  }
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+}
+
+void beepBuzzer() {
+  digitalWrite(BUZZER_PIN, HIGH);
+  delay(DELAY_MS);
+  digitalWrite(BUZZER_PIN, LOW);
+  delay(DELAY_MS);
+}
+
+void turnOffAllLEDs() {
+  for (uint8_t i = 0; i < NUMBER_LED; i++) {
+    digitalWrite(LED_PINS[i], LOW);
+  }
+}
 
 void setup() {
   Serial.begin(9600);
-  // for loop for registor pinMode.
-  for (int i = 0; i < NUMBER_LED; i++) {
-    pinMode(ledPins[i], OUTPUT);
-  }
-  // Register Buzzer Pinout
-  pinMode(Buzzer, OUTPUT);
+  initializePins();
 }
 
 void loop() {
-  int i = 0;
-
-  // turn on LED by using while 
-  while (i < NUMBER_LED){
-    if(i >= i){
-      digitalWrite(ledPins[i], HIGH);
-    }
-    // buzzer working after do action
-    digitalWrite(Buzzer, HIGH);
-    delay(500);
-    digitalWrite(Buzzer, LOW);
-    delay(500);
+  uint8_t i = 0;
+  
+  // Turn on LEDs sequentially using while loop
+  while (i < NUMBER_LED) {
+    digitalWrite(LED_PINS[i], HIGH);
+    beepBuzzer();
     i++;
   }
   
-  // reset i to 0
+  // Turn off all LEDs
   i = 0;
-
-  // turn off all LEDs after turn on all LEDs
   while (i < NUMBER_LED) {
-    digitalWrite(ledPins[i], LOW);
+    digitalWrite(LED_PINS[i], LOW);
     i++;
   }
-  // turn off all LEDs
-  digitalWrite(Buzzer, HIGH);
-  delay(500);
-  digitalWrite(Buzzer, LOW);
-  delay(500);
+  
+  beepBuzzer();
 }
