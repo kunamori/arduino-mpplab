@@ -35,7 +35,7 @@ void loop() {
           x=0;
         }
         if (client.connect(host, port)) {
-          
+
           client.print(String(x)+"&");
           client.flush();
           client.stop();

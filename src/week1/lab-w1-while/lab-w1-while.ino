@@ -1,6 +1,4 @@
 // Define LED Pinout
-// <-- Left    Right -->
-//    10 9 8 7 6 5 [4] <- Buzzer
 #define LED_1 10
 #define LED_2 9
 #define LED_3 8
@@ -30,7 +28,7 @@ void setup() {
 void loop() {
   int i = 0;
 
-  // turn on LED by using while 
+  // turn on LED by using while
   while (i < NUMBER_LED){
     if(i >= i){
       digitalWrite(ledPins[i], HIGH);
@@ -42,7 +40,7 @@ void loop() {
     delay(500);
     i++;
   }
-  
+
   // reset i to 0
   i = 0;
 

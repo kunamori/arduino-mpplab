@@ -1,4 +1,4 @@
-#include <WiFi.h> 
+#include <WiFi.h>
 #include <ESP32Servo.h>
 
 // Wifi credentials

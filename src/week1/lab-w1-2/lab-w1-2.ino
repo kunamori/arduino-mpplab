@@ -67,5 +67,5 @@ void loop() {
         // Print error when input string or number greater than NUMBER_LED
         Serial.println("ERROR: INPUT_USER");
       }
-  } 
+  }
 }

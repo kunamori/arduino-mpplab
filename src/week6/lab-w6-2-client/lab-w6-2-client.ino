@@ -34,7 +34,7 @@ void loop() {
     if(digitalRead(5)==0){
       if (state_relay[0] == 0){
         if (client.connect(host, port)) {
-          
+
           client.print("ON1&");
           client.flush();
           client.stop();
@@ -59,7 +59,7 @@ void loop() {
     if(digitalRead(4)==0){
       if (state_relay[1] == 0){
         if (client.connect(host, port)) {
-          
+
           client.print("ON2&");
           client.flush();
           client.stop();

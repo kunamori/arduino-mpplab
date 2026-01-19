@@ -31,7 +31,7 @@ void loop() {
       if(VAL_RGB[i] > 255 || VAL_RGB[i] < 0){
         Serial.println("ERROR: Input more than 255 or negative number.");
         ERR_CODE = 1;
-      } 
+      }
     }
     // if there is no error then run program.
     if(ERR_CODE == 0){
