@@ -56,3 +56,11 @@ arduino-cli lib install "Adafruit Unified Sensor"
 arduino-cli lib install "Keypad"
 arduino-cli lib install "MFRC522"
 ```
+
+## 📖 Usage
+
+1. Navigate to desired week folder (e.g., `src/week-01/lab1/`)
+2. Open `.ino` file in Arduino IDE
+3. Connect your Arduino/ESP32
+4. Select correct board and port
+5. Upload the sketch
