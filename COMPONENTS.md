@@ -51,7 +51,7 @@ Complete list of all components needed for this course.
 ## 📊 Component Usage by Week
 
 | Component | Week 1 | Week 2 | Week 3 | Week 4 | Week 5 | Week 6 | Week 7 |
-|-----------|: ------:|:------:|:------:|: ------:|:------:|:------:|:------:|
+|-----------|--------|--------|--------|--------|--------|--------|--------|
 | Arduino UNO | ✓ | ✓ | ✓ | ✓ | ✓ | | |
 | ESP32 | | | | | | ✓ | ✓ |
 | LEDs | ✓ | ✓ | | | | | |
@@ -62,3 +62,4 @@ Complete list of all components needed for this course.
 | DHT22 | | | | ✓ | | | |
 | Keypad 4×4 | | | | | ✓ | | |
 | RFID Module | | | | | ✓ | | |
+
