@@ -1,6 +1,6 @@
-# Microcontroller with Arduino 🤖
+# Microprocessor with Arduino 🤖
 
-Repository for code backup from Microcontroller Practice Subject.
+Repository for code backup from Microprocessor Practice Subject.
 
 ## 🧰 Hardware Requirements
 
