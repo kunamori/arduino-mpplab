@@ -8,7 +8,7 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 ## Components Required
 - Arduino UNO R3 × 1
 - LEDs (5mm, various colors) × 6
-- Resistors 220Ω × 6
+- Resistor 220Ω × 1
 - Buzzer × 1
 - Breadboard
 - Jumper wires
@@ -18,14 +18,14 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 
 | Arduino Pin | Component | Connection | Notes |
 |------------|-----------|------------|-------|
-| Pin 10 | LED_1 | Anode (through 220Ω resistor) | LED number 1 |
-| Pin 9 | LED_2 | Anode (through 220Ω resistor) | LED number 2 |
-| Pin 8 | LED_3 | Anode (through 220Ω resistor) | LED number 3 |
-| Pin 7 | LED_4 | Anode (through 220Ω resistor) | LED number 4 |
-| Pin 6 | LED_5 | Anode (through 220Ω resistor) | LED number 5 |
-| Pin 5 | LED_6 | Anode (through 220Ω resistor) | LED number 6 |
+| Pin 10 | LED_1 | Anode (positive leg) | LED number 1 |
+| Pin 9 | LED_2 | Anode (positive leg) | LED number 2 |
+| Pin 8 | LED_3 | Anode (positive leg) | LED number 3 |
+| Pin 7 | LED_4 | Anode (positive leg) | LED number 4 |
+| Pin 6 | LED_5 | Anode (positive leg) | LED number 5 |
+| Pin 5 | LED_6 | Anode (positive leg) | LED number 6 |
 | Pin 4 | Buzzer | Positive terminal | Input confirmation |
-| GND | All LEDs & Buzzer | Cathode/Negative | Common ground |
+| GND | All LEDs & Buzzer | Via 220Ω resistor/Direct | Common ground |
 
 ## ASCII Wiring Diagram
 
@@ -33,13 +33,13 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
         Arduino UNO                    Components
       ┌─────────────┐              
       │             │              
-      │   Pin 10 ●──┼────[220Ω]────LED1+  ──┐
-      │   Pin 9  ●──┼────[220Ω]────LED2+  ──┤
-      │   Pin 8  ●──┼────[220Ω]────LED3+  ──┤
-      │   Pin 7  ●──┼────[220Ω]────LED4+  ──├─── GND
-      │   Pin 6  ●──┼────[220Ω]────LED5+  ──┤
-      │   Pin 5  ●──┼────[220Ω]────LED6+  ──┤
-      │   Pin 4  ●──┼────────────Buzzer+  ──┘
+      │   Pin 10 ●──┼────────────LED1+  ──┐
+      │   Pin 9  ●──┼────────────LED2+  ──┤
+      │   Pin 8  ●──┼────────────LED3+  ──┤
+      │   Pin 7  ●──┼────────────LED4+  ──├───[220Ω]─── GND
+      │   Pin 6  ●──┼────────────LED5+  ──┤
+      │   Pin 5  ●──┼────────────LED6+  ──┤
+      │   Pin 4  ●──┼────────────Buzzer+ ─┘
       │             │              
       │   GND    ●──┼─────────────────────────
       │   USB    ●──┼─── To Computer (Serial)
@@ -49,21 +49,23 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 ## Breadboard Layout
 
 1. Place all 6 LEDs in a row on the breadboard
-2. Connect the anode (longer leg) of each LED to its respective Arduino pin through a 220Ω resistor
-3. Connect all LED cathodes (shorter leg) to the ground rail
-4. Connect the buzzer positive terminal to pin 4
-5. Connect the buzzer negative terminal to the ground rail
-6. Connect the ground rail to Arduino GND
-7. Connect Arduino to computer via USB for serial communication
+2. Connect the anode (longer leg) of each LED directly to its respective Arduino pin
+3. Connect all LED cathodes (shorter leg) together to a common point
+4. Connect a single 220Ω resistor from the common cathode point to the ground rail
+5. Connect the buzzer positive terminal to pin 4
+6. Connect the buzzer negative terminal directly to the ground rail
+7. Connect the ground rail to Arduino GND
+8. Connect Arduino to computer via USB for serial communication
 
 ## Component-Specific Details
 
 ### LEDs
 - **Type**: Standard 5mm LEDs
 - **Forward Voltage**: ~2V
-- **Current**: 20mA (max)
-- **Resistor**: 220Ω current limiting resistor required for each LED
+- **Current**: ~20mA per LED
+- **Resistor**: Single 220Ω current limiting resistor shared by all LEDs on common cathode
 - **Calculation**: (5V - 2V) / 0.02A = 150Ω (220Ω provides safety margin)
+- **Note**: Multiple LEDs can be on simultaneously; total current increases with each active LED
 
 ### Buzzer
 - **Type**: Active buzzer (requires DC voltage)
@@ -135,7 +137,7 @@ LED: 6 ON
 |-------|----------------|----------|
 | No serial response | Wrong baud rate | Ensure Serial Monitor is set to 9600 baud |
 | LED not responding | Wrong pin connection | Verify pin numbers match LED positions |
-| LED not lighting | Wrong polarity | Ensure anode (long leg) to resistor, cathode to GND |
+| LED not lighting | Wrong polarity | Ensure anode (long leg) to pin, cathode to resistor |
 | LED too dim | Wrong resistor value | Verify 220Ω resistor (Red-Red-Brown) |
 | Buzzer not working | Wrong polarity | Check positive to pin 4, negative to GND |
 | Error on valid input | Input format issue | Ensure newline character is sent (press Enter) |
