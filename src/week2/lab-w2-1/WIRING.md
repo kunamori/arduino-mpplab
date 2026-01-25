@@ -3,9 +3,11 @@
 **File**: `lab-w2-1.ino`
 
 ## Description
+
 This lab demonstrates reading push button inputs with INPUT_PULLUP mode and software debouncing. Two buttons control a counter (0-99): one increments, one decrements, with values displayed on the Serial Monitor.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - Push buttons × 2
 - Breadboard
@@ -13,17 +15,17 @@ This lab demonstrates reading push button inputs with INPUT_PULLUP mode and soft
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 2 | PUSH_SW_1 | Button terminal 1 | Increment button (INPUT_PULLUP) |
-| Pin 3 | PUSH_SW_2 | Button terminal 1 | Decrement button (INPUT_PULLUP) |
-| GND | Both buttons | Button terminal 2 | Common ground |
+| Arduino Pin | Component    | Connection        | Notes                           |
+| ----------- | ------------ | ----------------- | ------------------------------- |
+| Pin 2       | PUSH_SW_1    | Button terminal 1 | Increment button (INPUT_PULLUP) |
+| Pin 3       | PUSH_SW_2    | Button terminal 1 | Decrement button (INPUT_PULLUP) |
+| GND         | Both buttons | Button terminal 2 | Common ground                   |
 
 ## ASCII Wiring Diagram
 
 ```
         Arduino UNO              Components
-      ┌─────────────┐              
+      ┌─────────────┐
       │             │          ┌───┐
       │   Pin 2  ●──┼──────────┤ ● │  PUSH_SW_1 (Increment)
       │             │          └─┬─┘
@@ -32,7 +34,7 @@ This lab demonstrates reading push button inputs with INPUT_PULLUP mode and soft
       │             │      │   │ ● │  PUSH_SW_2 (Decrement)
       │             │      │   └─┬─┘
       │   GND    ●──┼──────┴─────┴───── GND
-      └─────────────┘              
+      └─────────────┘
 ```
 
 ## Breadboard Layout
@@ -46,6 +48,7 @@ This lab demonstrates reading push button inputs with INPUT_PULLUP mode and soft
 ## Component-Specific Details
 
 ### Push Buttons
+
 - **Type**: Momentary tactile switches
 - **Configuration**: INPUT_PULLUP mode (internal pull-up resistors enabled)
 - **Active State**: LOW (0) when pressed, HIGH (1) when released
@@ -106,16 +109,16 @@ This lab demonstrates reading push button inputs with INPUT_PULLUP mode and soft
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Button not responding | Loose connection | Check button and wire connections |
-| Multiple counts per press | Debouncing issue | Verify 50ms delay in code |
-| Always reads pressed | Wrong wiring | Ensure button connects to GND, not VCC |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Inverted logic | Missing INPUT_PULLUP | Verify pinMode uses INPUT_PULLUP |
-| Erratic behavior | Floating pin | Ensure INPUT_PULLUP is enabled |
-| Counter skips numbers | Contact bounce | Clean button contacts or increase delay |
-| No wrap-around | Logic error | Re-upload sketch |
+| Issue                     | Possible Cause       | Solution                                |
+| ------------------------- | -------------------- | --------------------------------------- |
+| Button not responding     | Loose connection     | Check button and wire connections       |
+| Multiple counts per press | Debouncing issue     | Verify 50ms delay in code               |
+| Always reads pressed      | Wrong wiring         | Ensure button connects to GND, not VCC  |
+| No serial output          | Wrong baud rate      | Set Serial Monitor to 9600 baud         |
+| Inverted logic            | Missing INPUT_PULLUP | Verify pinMode uses INPUT_PULLUP        |
+| Erratic behavior          | Floating pin         | Ensure INPUT_PULLUP is enabled          |
+| Counter skips numbers     | Contact bounce       | Clean button contacts or increase delay |
+| No wrap-around            | Logic error          | Re-upload sketch                        |
 
 ## Understanding INPUT_PULLUP
 

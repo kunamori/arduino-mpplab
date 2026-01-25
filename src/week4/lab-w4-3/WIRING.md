@@ -3,9 +3,11 @@
 **File**: `lab-w4-3.ino`
 
 ## Description
+
 This lab combines the DHT22 temperature/humidity sensor with an I2C LCD display. Temperature and humidity readings are shown on a 16×2 LCD screen instead of the Serial Monitor, creating a standalone environmental monitoring device.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - DHT22 Temperature/Humidity Sensor × 1
 - LCD 16×2 with I2C module × 1
@@ -15,13 +17,13 @@ This lab combines the DHT22 temperature/humidity sensor with an I2C LCD display.
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 2 | DHT22 | Data pin | Digital I/O |
-| 5V | DHT22 + LCD | VCC/+ | Shared power |
-| GND | DHT22 + LCD | GND/- | Shared ground |
-| SDA (A4) | LCD I2C | SDA | I2C data line |
-| SCL (A5) | LCD I2C | SCL | I2C clock line |
+| Arduino Pin | Component   | Connection | Notes          |
+| ----------- | ----------- | ---------- | -------------- |
+| Pin 2       | DHT22       | Data pin   | Digital I/O    |
+| 5V          | DHT22 + LCD | VCC/+      | Shared power   |
+| GND         | DHT22 + LCD | GND/-      | Shared ground  |
+| SDA (A4)    | LCD I2C     | SDA        | I2C data line  |
+| SCL (A5)    | LCD I2C     | SCL        | I2C clock line |
 
 ## ASCII Wiring Diagram
 
@@ -48,10 +50,12 @@ This lab combines the DHT22 temperature/humidity sensor with an I2C LCD display.
 ## I2C Connection Details
 
 ### I2C Pins on Arduino UNO
+
 - **SDA**: Pin A4 (Data line)
 - **SCL**: Pin A5 (Clock line)
 
 ### LCD I2C Module
+
 - **I2C Address**: 0x27 (common) or 0x3F
 - **Pins**: VCC, GND, SDA, SCL
 - **Backlight**: Controlled via I2C (usually always on)
@@ -75,6 +79,7 @@ This lab combines the DHT22 temperature/humidity sensor with an I2C LCD display.
 ## Component-Specific Details
 
 ### DHT22 Sensor
+
 - **Type**: Digital temperature and humidity sensor
 - **Temperature Range**: -40°C to 80°C (±0.5°C accuracy)
 - **Humidity Range**: 0-100% RH (±2% accuracy)
@@ -83,6 +88,7 @@ This lab combines the DHT22 temperature/humidity sensor with an I2C LCD display.
 - **Library**: DHT sensor library by Adafruit
 
 ### LCD 16×2 with I2C
+
 - **Display**: 16 characters × 2 lines
 - **Interface**: I2C (2-wire: SDA, SCL)
 - **I2C Address**: 0x27 (default, configurable)
@@ -94,7 +100,7 @@ This lab combines the DHT22 temperature/humidity sensor with an I2C LCD display.
 
 - **I2C Address**: Code uses 0x27; if LCD doesn't work, try 0x3F
 - **Backlight Control**: Can be turned on/off with `lcd.backlight()` / `lcd.noBacklight()`
-- **Display Format**: 
+- **Display Format**:
   - Line 1: "Temp : XX.XC"
   - Line 2: "Humidity: XX.X%"
 - **Continuous Update**: Display updates approximately every 2 seconds
@@ -152,17 +158,17 @@ This lab combines the DHT22 temperature/humidity sensor with an I2C LCD display.
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| LCD blank/no backlight | No power | Check VCC and GND connections |
-| LCD shows blocks | Not initialized | Check I2C wiring (SDA, SCL) |
-| No text on LCD | Wrong I2C address | Try 0x3F instead of 0x27 in code |
-| Garbled text | I2C communication error | Check SDA (A4) and SCL (A5) connections |
-| DHT values not updating | Sensor disconnected | Check DHT22 wiring |
-| Always shows old values | DHT read error | Check DHT22 DATA pin connection |
-| Backlight too bright | Normal | Adjust LCD contrast potentiometer on I2C module |
-| Display flickers | Power supply issue | Ensure stable 5V power supply |
-| Wrong values | Sensor placement | Ensure DHT22 not near heat source |
+| Issue                   | Possible Cause          | Solution                                        |
+| ----------------------- | ----------------------- | ----------------------------------------------- |
+| LCD blank/no backlight  | No power                | Check VCC and GND connections                   |
+| LCD shows blocks        | Not initialized         | Check I2C wiring (SDA, SCL)                     |
+| No text on LCD          | Wrong I2C address       | Try 0x3F instead of 0x27 in code                |
+| Garbled text            | I2C communication error | Check SDA (A4) and SCL (A5) connections         |
+| DHT values not updating | Sensor disconnected     | Check DHT22 wiring                              |
+| Always shows old values | DHT read error          | Check DHT22 DATA pin connection                 |
+| Backlight too bright    | Normal                  | Adjust LCD contrast potentiometer on I2C module |
+| Display flickers        | Power supply issue      | Ensure stable 5V power supply                   |
+| Wrong values            | Sensor placement        | Ensure DHT22 not near heat source               |
 
 ## Finding I2C Address
 
@@ -175,7 +181,7 @@ void setup() {
   Wire.begin();
   Serial.begin(9600);
   Serial.println("Scanning I2C...");
-  
+
   for(byte addr = 1; addr < 127; addr++) {
     Wire.beginTransmission(addr);
     if(Wire.endTransmission() == 0) {
@@ -213,13 +219,13 @@ void setup() {
 void loop() {
   float h = dht.readHumidity();
   float t = dht.readTemperature();
-  
+
   if(!isnan(h) && !isnan(t)) {
     lcd.setCursor(0,0);
     lcd.print("Temp : ");
     lcd.print(t);
     lcd.print("C");
-    
+
     lcd.setCursor(0,1);
     lcd.print("Humidity: ");
     lcd.print(h);
@@ -230,15 +236,15 @@ void loop() {
 
 ## LCD Control Commands
 
-| Command | Function |
-|---------|----------|
-| `lcd.init()` | Initialize LCD |
-| `lcd.backlight()` | Turn on backlight |
-| `lcd.noBacklight()` | Turn off backlight |
-| `lcd.clear()` | Clear entire display |
-| `lcd.home()` | Move cursor to (0,0) |
-| `lcd.setCursor(col, row)` | Position cursor |
-| `lcd.print(text)` | Display text/value |
+| Command                   | Function             |
+| ------------------------- | -------------------- |
+| `lcd.init()`              | Initialize LCD       |
+| `lcd.backlight()`         | Turn on backlight    |
+| `lcd.noBacklight()`       | Turn off backlight   |
+| `lcd.clear()`             | Clear entire display |
+| `lcd.home()`              | Move cursor to (0,0) |
+| `lcd.setCursor(col, row)` | Position cursor      |
+| `lcd.print(text)`         | Display text/value   |
 
 ## Libraries Required
 

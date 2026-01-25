@@ -3,9 +3,11 @@
 **File**: `lab-w5-2.ino`
 
 ## Description
+
 This lab demonstrates an RFID-based access control system. Users scan RFID cards/tags using an RC522 RFID reader. The card UID (Unique Identifier) is displayed on an I2C LCD screen with buzzer feedback for each scan.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - RFID-RC522 Module × 1
 - RFID Tags/Cards × 1-2
@@ -16,19 +18,19 @@ This lab demonstrates an RFID-based access control system. Users scan RFID cards
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 10 | RFID SS (SDA) | Slave Select | SPI chip select |
-| Pin 9 | RFID RST | Reset | Module reset |
-| Pin 13 | RFID SCK | Clock | SPI clock |
-| Pin 11 | RFID MOSI | Data Out | SPI data Arduino→RFID |
-| Pin 12 | RFID MISO | Data In | SPI data RFID→Arduino |
-| Pin A0 | Buzzer | Positive | Audio feedback |
-| Pin A4 (SDA) | LCD I2C | SDA | I2C data |
-| Pin A5 (SCL) | LCD I2C | SCL | I2C clock |
-| 3.3V | RFID | VCC | Power (3.3V only!) |
-| 5V | LCD + Buzzer | VCC/+ | Power supply |
-| GND | All | GND | Common ground |
+| Arduino Pin  | Component     | Connection   | Notes                 |
+| ------------ | ------------- | ------------ | --------------------- |
+| Pin 10       | RFID SS (SDA) | Slave Select | SPI chip select       |
+| Pin 9        | RFID RST      | Reset        | Module reset          |
+| Pin 13       | RFID SCK      | Clock        | SPI clock             |
+| Pin 11       | RFID MOSI     | Data Out     | SPI data Arduino→RFID |
+| Pin 12       | RFID MISO     | Data In      | SPI data RFID→Arduino |
+| Pin A0       | Buzzer        | Positive     | Audio feedback        |
+| Pin A4 (SDA) | LCD I2C       | SDA          | I2C data              |
+| Pin A5 (SCL) | LCD I2C       | SCL          | I2C clock             |
+| 3.3V         | RFID          | VCC          | Power (3.3V only!)    |
+| 5V           | LCD + Buzzer  | VCC/+        | Power supply          |
+| GND          | All           | GND          | Common ground         |
 
 ## ASCII Wiring Diagram
 
@@ -70,6 +72,7 @@ This lab demonstrates an RFID-based access control system. Users scan RFID cards
 ```
 
 ### Pin Functions
+
 - **SDA (SS)**: Slave Select / Chip Select (pin 10)
 - **SCK**: SPI Clock (pin 13)
 - **MOSI**: Master Out Slave In (pin 11)
@@ -104,6 +107,7 @@ This lab demonstrates an RFID-based access control system. Users scan RFID cards
 ## Component-Specific Details
 
 ### RC522 RFID Module
+
 - **Frequency**: 13.56 MHz
 - **Protocol**: ISO/IEC 14443 A/B
 - **Operating Voltage**: 3.3V (**NOT 5V - will damage module!**)
@@ -113,6 +117,7 @@ This lab demonstrates an RFID-based access control system. Users scan RFID cards
 - **Library**: MFRC522 by GithubCommunity
 
 ### RFID Tags/Cards
+
 - **Type**: MIFARE Classic 1K or similar
 - **UID**: Unique 4-byte or 7-byte identifier
 - **Frequency**: 13.56 MHz
@@ -120,6 +125,7 @@ This lab demonstrates an RFID-based access control system. Users scan RFID cards
 - **Form Factor**: Card, key fob, or sticker
 
 ### LCD I2C
+
 - **Display**: 16 characters × 2 lines
 - **I2C Address**: 0x27 (configurable)
 - **Library**: LiquidCrystal_I2C
@@ -196,6 +202,7 @@ Arduino ← MISO ← RC522
 ## Serial Monitor & LCD Output Examples
 
 **Serial Monitor**:
+
 ```
 AB:CD:EF:01:
 12:34:56:78:
@@ -203,6 +210,7 @@ AB:CD:EF:01:
 ```
 
 **LCD Display**:
+
 ```
 ┌────────────────┐
 │AB:CD:EF:01:    │  ← RFID UID
@@ -229,16 +237,16 @@ Displayed as: "AB:CD:EF:01:"
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Module not detected | Wrong voltage | Verify 3.3V to RC522 VCC (not 5V!) |
-| No card detection | SPI wiring wrong | Check SCK (13), MOSI (11), MISO (12), SS (10) |
-| Module damaged/hot | 5V connected | Module may be damaged; replace and use 3.3V |
-| LCD not working | I2C issue | Check SDA (A4) and SCL (A5) connections |
-| Buzzer not sounding | Wrong pin | Verify buzzer to A0 |
-| Wrong UID displayed | Read error | Move card closer to antenna |
-| No response | RST not connected | Connect RST to pin 9 |
-| Erratic behavior | Power supply weak | Ensure stable 3.3V and 5V supplies |
+| Issue               | Possible Cause    | Solution                                      |
+| ------------------- | ----------------- | --------------------------------------------- |
+| Module not detected | Wrong voltage     | Verify 3.3V to RC522 VCC (not 5V!)            |
+| No card detection   | SPI wiring wrong  | Check SCK (13), MOSI (11), MISO (12), SS (10) |
+| Module damaged/hot  | 5V connected      | Module may be damaged; replace and use 3.3V   |
+| LCD not working     | I2C issue         | Check SDA (A4) and SCL (A5) connections       |
+| Buzzer not sounding | Wrong pin         | Verify buzzer to A0                           |
+| Wrong UID displayed | Read error        | Move card closer to antenna                   |
+| No response         | RST not connected | Connect RST to pin 9                          |
+| Erratic behavior    | Power supply weak | Ensure stable 3.3V and 5V supplies            |
 
 ## Code Reference
 
@@ -261,7 +269,7 @@ void setup() {
   lcd.print("Power On.");
   delay(2000);
   lcd.clear();
-  
+
   SPI.begin();
   mfrc522.PCD_Init();
   pinMode(Buzzer, OUTPUT);
@@ -276,14 +284,14 @@ void loop() {
         rfidnum += toHexStr(mfrc522.uid.uidByte[i]) + ":";
       }
       rfidnum.toUpperCase();
-      
+
       lcd.print(rfidnum);
       Serial.println(rfidnum);
-      
+
       digitalWrite(Buzzer, HIGH);
       delay(500);
       digitalWrite(Buzzer, LOW);
-      
+
       mfrc522.PICC_HaltA();
       mfrc522.PCD_StopCrypto1();
     }

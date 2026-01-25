@@ -3,18 +3,20 @@
 **File**: `lab-w7-2-client.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi UDP client for querying DHT22 temperature/humidity sensor data remotely. The client receives user commands via Serial Monitor ("TEMP" or "HUMI") and sends UDP packets to request sensor readings from the server. The server responds with the requested data. This is the **client** side that queries the sensor server (lab-w7-2-server).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - USB cable for Serial communication
 - Computer with Serial Monitor
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| USB | Computer | Serial communication | For user input |
+| ESP32 Pin | Component | Connection           | Notes          |
+| --------- | --------- | -------------------- | -------------- |
+| USB       | Computer  | Serial communication | For user input |
 
 **Note**: This client has no physical components - all control is via Serial Monitor.
 
@@ -22,25 +24,25 @@ This lab demonstrates ESP32 WiFi UDP client for querying DHT22 temperature/humid
 
 ```
         ESP32 DEVKIT
-      ┌─────────────┐       
-      │             │       
+      ┌─────────────┐
+      │             │
       │             │       No physical components
-      │             │       
+      │             │
       │             │       Input: Serial Monitor ("TEMP" or "HUMI")
       │             │       Output: UDP packets & sensor data display
-      │             │       
+      │             │
       │   USB    ●──┼───────► Computer
       │             │         (Serial Monitor)
-      └─────────────┘       
+      └─────────────┘
 
       WiFi: Connects to "ESP32-Nihahaha" (server's AP)
       UDP: Sends to 192.168.4.1:6969
       Client IP: 192.168.4.5 (static)
-      
+
       User Input (Serial):
         TEMP → Request temperature
         HUMI → Request humidity
-      
+
       Server Response:
         Temperature: e.g., "25.30"
         Humidity: e.g., "60.50"
@@ -55,6 +57,7 @@ This lab demonstrates ESP32 WiFi UDP client for querying DHT22 temperature/humid
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V USB power
 - **Serial**: USB-to-Serial converter built-in
@@ -62,6 +65,7 @@ This lab demonstrates ESP32 WiFi UDP client for querying DHT22 temperature/humid
 - **IP Configuration**: Static IP 192.168.4.5
 
 ### Serial Monitor
+
 - **Baud Rate**: 9600
 - **Input**: Text commands ("TEMP" or "HUMI")
 - **Line Ending**: Newline (\n)
@@ -93,6 +97,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Client IP**: 192.168.4.5 (static configuration)
@@ -108,7 +113,7 @@ Network Topology:
 - **WiFi Mode**: Station (STA) mode - connects to server's Access Point
 - **IP Configuration**: STATIC IP (192.168.4.5) - not DHCP
 - **Protocol**: UDP (connectionless, request-response pattern)
-- **Data Format**: 
+- **Data Format**:
   - Request: "TEMP" or "HUMI" (text string)
   - Response: Decimal number (e.g., "25.30", "60.50")
 - **Input Validation**: Client accepts any text, server validates
@@ -201,6 +206,7 @@ Received (Temperature): 24.80
 ## Data Protocol
 
 **Request Format** (Client → Server):
+
 ```
 Command (string)
 
@@ -210,6 +216,7 @@ Examples:
 ```
 
 **Response Format** (Server → Client):
+
 ```
 Sensor Value (string)
 
@@ -219,6 +226,7 @@ Examples:
 ```
 
 **UDP Transaction**:
+
 ```
 1. User types "TEMP" in Serial Monitor
 2. Client reads "TEMP\n"
@@ -254,18 +262,18 @@ Must be called BEFORE WiFi.begin()
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Won't connect to WiFi | Server not running | Start server first (lab-w7-2-server) |
-| "Connecting to WiFi..." loop | Wrong SSID/password | Verify credentials match server |
-| Wrong IP address | Static IP not set | Verify WiFi.config() before WiFi.begin() |
-| No response to TEMP/HUMI | UDP packet lost | Try sending command again |
-| Response shows wrong data | Timing issue | Wait 2+ seconds between requests |
-| Input ignored | Serial not ready | Wait for "Connected to WiFi" message |
-| WiFi disconnects | Weak signal | Move ESP32s closer together |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Response timeout | Server not running | Check server Serial Monitor |
-| Case sensitivity issue | Wrong command | Type "TEMP" not "temp" |
+| Issue                        | Possible Cause      | Solution                                 |
+| ---------------------------- | ------------------- | ---------------------------------------- |
+| Won't connect to WiFi        | Server not running  | Start server first (lab-w7-2-server)     |
+| "Connecting to WiFi..." loop | Wrong SSID/password | Verify credentials match server          |
+| Wrong IP address             | Static IP not set   | Verify WiFi.config() before WiFi.begin() |
+| No response to TEMP/HUMI     | UDP packet lost     | Try sending command again                |
+| Response shows wrong data    | Timing issue        | Wait 2+ seconds between requests         |
+| Input ignored                | Serial not ready    | Wait for "Connected to WiFi" message     |
+| WiFi disconnects             | Weak signal         | Move ESP32s closer together              |
+| No serial output             | Wrong baud rate     | Set Serial Monitor to 9600 baud          |
+| Response timeout             | Server not running  | Check server Serial Monitor              |
+| Case sensitivity issue       | Wrong command       | Type "TEMP" not "temp"                   |
 
 ## Code Reference
 
@@ -379,6 +387,7 @@ Limitations:
 ## Network Architecture
 
 This lab demonstrates **UDP request-response communication**:
+
 - **Server**: Creates WiFi Access Point, reads DHT22 sensor
 - **Client**: Sends sensor query commands via UDP
 - **Protocol**: UDP for fast, low-latency sensor queries

@@ -3,9 +3,11 @@
 **File**: `lab-w7-2-server.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi UDP server with DHT22 temperature/humidity sensor. The ESP32 creates a WiFi Access Point, continuously reads sensor data, and responds to UDP requests for temperature ("TEMP") or humidity ("HUMI") values. This is the **server** side that reads the DHT22 sensor and responds to client queries (lab-w7-2-client).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - DHT22 (AM2302) Temperature/Humidity Sensor × 1
 - 10kΩ pull-up resistor × 1 (some DHT22 modules have built-in resistor)
@@ -14,18 +16,18 @@ This lab demonstrates ESP32 WiFi UDP server with DHT22 temperature/humidity sens
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 33 | DHT22 | Data pin (middle) | Digital I/O |
-| 3.3V | DHT22 | VCC (left/+) | Power supply |
-| GND | DHT22 | GND (right/-) | Common ground |
-| GPIO 33 to 3.3V | 10kΩ resistor | Pull-up | May be built into module |
+| ESP32 Pin       | Component     | Connection        | Notes                    |
+| --------------- | ------------- | ----------------- | ------------------------ |
+| GPIO 33         | DHT22         | Data pin (middle) | Digital I/O              |
+| 3.3V            | DHT22         | VCC (left/+)      | Power supply             |
+| GND             | DHT22         | GND (right/-)     | Common ground            |
+| GPIO 33 to 3.3V | 10kΩ resistor | Pull-up           | May be built into module |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT         DHT22 Sensor
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │       ┌────────────┐
       │  3.3V    ●──┼───────┤ VCC   (+)  │
       │             │       │            │
@@ -40,14 +42,14 @@ This lab demonstrates ESP32 WiFi UDP server with DHT22 temperature/humidity sens
                    [10kΩ Pull-up]
                         │
         3.3V ───────────┘
-      
+
       WiFi: Creates AP "ESP32-Nihahaha"
       UDP Server: Listens on port 6969
       IP Address: 192.168.4.1
-      
+
       Receives: "TEMP" or "HUMI"
       Sends: Temperature or Humidity value
-      
+
       Example:
         Request: "TEMP"  → Response: "25.30"
         Request: "HUMI"  → Response: "60.50"
@@ -67,12 +69,14 @@ This lab demonstrates ESP32 WiFi UDP server with DHT22 temperature/humidity sens
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V power
 - **GPIO 33**: ADC1_CH5, suitable for digital I/O
 - **WiFi Mode**: Access Point (AP) mode
 
 ### DHT22 (AM2302) Sensor
+
 - **Type**: Digital temperature and humidity sensor
 - **Temperature Range**: -40°C to 80°C (±0.5°C accuracy)
 - **Humidity Range**: 0% to 100% RH (±2% accuracy)
@@ -87,6 +91,7 @@ This lab demonstrates ESP32 WiFi UDP server with DHT22 temperature/humidity sens
 - **Pull-up Resistor**: 10kΩ required on DATA line
 
 ### DHT Library
+
 - **Library**: "DHT sensor library" by Adafruit
 - **Dependencies**: "Adafruit Unified Sensor" library
 - **Functions**:
@@ -116,6 +121,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point IP)
@@ -128,7 +134,7 @@ Network Topology:
 
 - **WiFi Mode**: Access Point (AP) mode - creates its own WiFi network
 - **Protocol**: UDP (connectionless, request-response pattern)
-- **Data Format**: 
+- **Data Format**:
   - Request: "TEMP" or "HUMI"
   - Response: Decimal number string (e.g., "25.30")
 - **Sensor Reading**: Every 2 seconds in loop
@@ -235,6 +241,7 @@ ap ip: 192.168.4.1
 ## Data Protocol
 
 **Request Format** (Client → Server):
+
 ```
 Command (string)
 
@@ -244,6 +251,7 @@ Examples:
 ```
 
 **Response Format** (Server → Client):
+
 ```
 Sensor Value (string)
 
@@ -253,6 +261,7 @@ Examples:
 ```
 
 **UDP Transaction**:
+
 ```
 1. Server reads DHT22 every 2 seconds
    - h = 58.70 (humidity)
@@ -278,15 +287,15 @@ Reading Sequence:
   0ms:  Start signal
   1ms:  Response signal
   40ms: Data transmission (40 bits)
-  
+
 Temperature Data:
   16-bit: Sign + 15-bit value
   Resolution: 0.1°C
-  
+
 Humidity Data:
   16-bit: 0-100% RH
   Resolution: 0.1%
-  
+
 Error Checking:
   8-bit checksum
 
@@ -296,18 +305,18 @@ If read < 2 seconds apart:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| "Failed to read from DHT sensor" | Wiring error | Check VCC, DATA, GND connections |
-| Sensor always reads 0 | No pull-up resistor | Add 10kΩ resistor DATA to 3.3V |
-| Erratic readings | Bad connection | Check breadboard connections |
-| Sensor too slow | Reading too fast | Ensure 2-second delay in loop |
-| No WiFi AP visible | Code not running | Check Serial Monitor, verify upload |
-| Client no response | UDP port mismatch | Verify both use port 6969 |
-| Compile error "serial" | Case sensitivity | Change 'serial' to 'Serial' in code |
-| Compile error "wifi" | Case sensitivity | Change 'wifi' to 'WiFi' in code |
-| Wrong temperature range | °F instead of °C | Use readTemperature() not readTemperature(true) |
-| NaN values | Sensor failure | Replace DHT22 sensor |
+| Issue                            | Possible Cause      | Solution                                        |
+| -------------------------------- | ------------------- | ----------------------------------------------- |
+| "Failed to read from DHT sensor" | Wiring error        | Check VCC, DATA, GND connections                |
+| Sensor always reads 0            | No pull-up resistor | Add 10kΩ resistor DATA to 3.3V                  |
+| Erratic readings                 | Bad connection      | Check breadboard connections                    |
+| Sensor too slow                  | Reading too fast    | Ensure 2-second delay in loop                   |
+| No WiFi AP visible               | Code not running    | Check Serial Monitor, verify upload             |
+| Client no response               | UDP port mismatch   | Verify both use port 6969                       |
+| Compile error "serial"           | Case sensitivity    | Change 'serial' to 'Serial' in code             |
+| Compile error "wifi"             | Case sensitivity    | Change 'wifi' to 'WiFi' in code                 |
+| Wrong temperature range          | °F instead of °C    | Use readTemperature() not readTemperature(true) |
+| NaN values                       | Sensor failure      | Replace DHT22 sensor                            |
 
 ## Code Issues & Fixes
 
@@ -394,20 +403,21 @@ void loop() {
 
 ## DHT22 vs DHT11
 
-| Feature | DHT22 (this lab) | DHT11 |
-|---------|------------------|-------|
-| Temperature Range | -40 to 80°C | 0 to 50°C |
-| Temperature Accuracy | ±0.5°C | ±2°C |
-| Humidity Range | 0-100% | 20-80% |
-| Humidity Accuracy | ±2% | ±5% |
-| Resolution | 0.1° / 0.1% | 1° / 1% |
-| Sampling Rate | 0.5 Hz (2 sec) | 1 Hz (1 sec) |
-| Price | Higher | Lower |
-| Pins | 4-pin | 4-pin or 3-pin |
+| Feature              | DHT22 (this lab) | DHT11          |
+| -------------------- | ---------------- | -------------- |
+| Temperature Range    | -40 to 80°C      | 0 to 50°C      |
+| Temperature Accuracy | ±0.5°C           | ±2°C           |
+| Humidity Range       | 0-100%           | 20-80%         |
+| Humidity Accuracy    | ±2%              | ±5%            |
+| Resolution           | 0.1° / 0.1%      | 1° / 1%        |
+| Sampling Rate        | 0.5 Hz (2 sec)   | 1 Hz (1 sec)   |
+| Price                | Higher           | Lower          |
+| Pins                 | 4-pin            | 4-pin or 3-pin |
 
 ## Network Architecture
 
 This lab demonstrates **UDP sensor query server**:
+
 - **Server**: Creates WiFi Access Point, reads DHT22 sensor
 - **Client**: Sends query commands, receives sensor data
 - **Protocol**: UDP request-response pattern

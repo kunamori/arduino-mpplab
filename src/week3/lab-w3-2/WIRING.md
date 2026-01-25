@@ -3,9 +3,11 @@
 **File**: `lab-w3-2.ino`
 
 ## Description
+
 This lab demonstrates hardware interrupts with push buttons controlling a dual 7-segment display counter (00-99). It combines interrupt-driven button input with multiplexed 7-segment display control using direct port manipulation for efficiency.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - 18-pin Dual 7-Segment Display (Common Anode) × 1
 - Push buttons × 2
@@ -17,20 +19,20 @@ This lab demonstrates hardware interrupts with push buttons controlling a dual 7
 
 ## Pin Configuration
 
-| Arduino Pin | Function | Connection | Notes |
-|------------|----------|------------|-------|
-| Pin 8 | Segment A | Display pins 10, 18 | PORTB bit 0 |
-| Pin 9 | Segment B | Display pins 7, 16 | PORTB bit 1 |
-| Pin 10 | Segment C | Display pins 4, 14 | PORTB bit 2 |
-| Pin 11 | Segment D | Display pins 2, 12 | PORTB bit 3 |
-| Pin 12 | Segment E | Display pins 1, 11 | PORTB bit 4 |
-| Pin 13 | Segment F | Display pins 9, 17 | PORTB bit 5 |
-| Pin 6 | Segment G | Display pins 5, 15 | Digital output |
-| Pin 5 | Digit 1 Control | Display pin 6 (CA) | Common Anode 1 |
-| Pin 4 | Digit 2 Control | Display pin 8 (CA) | Common Anode 2 |
-| Pin 2 | PUSH_SW_1 | Increment button | INT0 interrupt |
-| Pin 3 | PUSH_SW_2 | Decrement button | INT1 interrupt |
-| GND | Common | Segments via resistors | Ground |
+| Arduino Pin | Function        | Connection             | Notes          |
+| ----------- | --------------- | ---------------------- | -------------- |
+| Pin 8       | Segment A       | Display pins 10, 18    | PORTB bit 0    |
+| Pin 9       | Segment B       | Display pins 7, 16     | PORTB bit 1    |
+| Pin 10      | Segment C       | Display pins 4, 14     | PORTB bit 2    |
+| Pin 11      | Segment D       | Display pins 2, 12     | PORTB bit 3    |
+| Pin 12      | Segment E       | Display pins 1, 11     | PORTB bit 4    |
+| Pin 13      | Segment F       | Display pins 9, 17     | PORTB bit 5    |
+| Pin 6       | Segment G       | Display pins 5, 15     | Digital output |
+| Pin 5       | Digit 1 Control | Display pin 6 (CA)     | Common Anode 1 |
+| Pin 4       | Digit 2 Control | Display pin 8 (CA)     | Common Anode 2 |
+| Pin 2       | PUSH_SW_1       | Increment button       | INT0 interrupt |
+| Pin 3       | PUSH_SW_2       | Decrement button       | INT1 interrupt |
+| GND         | Common          | Segments via resistors | Ground         |
 
 ## ASCII Wiring Diagram
 
@@ -123,6 +125,7 @@ Segments: A, B, C, D, E, F, G, DP (decimal point)
 ## Component-Specific Details
 
 ### 7-Segment Display
+
 - **Type**: Common Anode (CA)
 - **Digits**: 2 digits (00-99)
 - **Segments**: 7 segments per digit (A-G) + decimal point (unused)
@@ -131,6 +134,7 @@ Segments: A, B, C, D, E, F, G, DP (decimal point)
 - **Refresh Rate**: 7ms per digit = ~71 Hz total refresh
 
 ### Display Encoding (Common Anode)
+
 The code uses hexadecimal values to encode digits (inverted for common anode):
 
 ```cpp
@@ -149,7 +153,9 @@ int display_num[10] = {
 ```
 
 ### Port Manipulation
+
 The code uses PORTB (pins 8-13) for fast parallel control:
+
 ```cpp
 DDRB = 0xFF;  // Set all PORTB pins as OUTPUT
 PORTB = display_num[digit];  // Write all 6 segments at once
@@ -220,18 +226,18 @@ PORTB = display_num[digit];  // Write all 6 segments at once
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| No display | Wrong power/ground | Check CA pins to Arduino control pins |
-| Segments always on | Common cathode display | This code requires common anode |
-| Dim display | High resistance | Remove or reduce current limiting resistors |
-| One digit missing | CA control issue | Check pins 4 or 5 connections |
-| Wrong segments | Incorrect wiring | Verify pin mapping matches table above |
-| Flickering | Slow refresh | Reduce delay from 7ms to 5ms |
-| Ghost images | Overlap timing | Add brief off period between digit switches |
-| Buttons not working | Interrupt issue | Check pins 2, 3 to buttons and GND |
-| Display shows wrong numbers | Encoding error | Verify display_num array values |
-| One segment always off | Bad connection | Check that segment's wire and resistor |
+| Issue                       | Possible Cause         | Solution                                    |
+| --------------------------- | ---------------------- | ------------------------------------------- |
+| No display                  | Wrong power/ground     | Check CA pins to Arduino control pins       |
+| Segments always on          | Common cathode display | This code requires common anode             |
+| Dim display                 | High resistance        | Remove or reduce current limiting resistors |
+| One digit missing           | CA control issue       | Check pins 4 or 5 connections               |
+| Wrong segments              | Incorrect wiring       | Verify pin mapping matches table above      |
+| Flickering                  | Slow refresh           | Reduce delay from 7ms to 5ms                |
+| Ghost images                | Overlap timing         | Add brief off period between digit switches |
+| Buttons not working         | Interrupt issue        | Check pins 2, 3 to buttons and GND          |
+| Display shows wrong numbers | Encoding error         | Verify display_num array values             |
+| One segment always off      | Bad connection         | Check that segment's wire and resistor      |
 
 ## Display Multiplexing Timing
 

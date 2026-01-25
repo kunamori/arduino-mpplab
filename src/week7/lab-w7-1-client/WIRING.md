@@ -3,18 +3,20 @@
 **File**: `lab-w7-1-client.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi UDP client functionality for controlling LEDs remotely. The client receives user input via Serial Monitor (numbers 1-6) and sends UDP packets to control 6 LEDs on the server. Unlike TCP, UDP is connectionless and faster. This is the **client** side that sends LED control commands to the server (lab-w7-1-server).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - USB cable for Serial communication
 - Computer with Serial Monitor
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| USB | Computer | Serial communication | For user input |
+| ESP32 Pin | Component | Connection           | Notes          |
+| --------- | --------- | -------------------- | -------------- |
+| USB       | Computer  | Serial communication | For user input |
 
 **Note**: This client has no physical components - all control is via Serial Monitor.
 
@@ -22,20 +24,20 @@ This lab demonstrates ESP32 WiFi UDP client functionality for controlling LEDs r
 
 ```
         ESP32 DEVKIT
-      ┌─────────────┐       
-      │             │       
+      ┌─────────────┐
+      │             │
       │             │       No physical components
-      │             │       
+      │             │
       │             │       Input: Serial Monitor (1-6)
       │             │       Output: UDP packets
-      │             │       
+      │             │
       │   USB    ●──┼───────► Computer
       │             │         (Serial Monitor)
-      └─────────────┘       
+      └─────────────┘
 
       WiFi: Connects to "ESP32-Nihahaha" (server's AP)
       UDP: Sends to 192.168.4.1:6969
-      
+
       User Input (Serial):
         1 → Toggle LED 1
         2 → Toggle LED 2
@@ -54,12 +56,14 @@ This lab demonstrates ESP32 WiFi UDP client functionality for controlling LEDs r
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V USB power
 - **Serial**: USB-to-Serial converter built-in
 - **WiFi Mode**: Station (STA) mode
 
 ### Serial Monitor
+
 - **Baud Rate**: 9600
 - **Input**: Single digit numbers (1-6)
 - **Line Ending**: Newline (\n)
@@ -90,6 +94,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point)
@@ -192,10 +197,11 @@ Connected to WiFi
 ## Data Protocol
 
 **Message Format**:
+
 ```
 UDP Packet:
   LED Number (string)
-  
+
 Examples:
   "1"  → Toggle LED 1
   "2"  → Toggle LED 2
@@ -203,6 +209,7 @@ Examples:
 ```
 
 **UDP Transaction**:
+
 ```
 1. User types "1" in Serial Monitor
 2. Client reads "1\n"
@@ -216,29 +223,29 @@ Examples:
 
 ## UDP vs TCP Comparison
 
-| Feature | UDP (this lab) | TCP (Week 6) |
-|---------|----------------|--------------|
-| Connection | Connectionless | Connection-oriented |
-| Reliability | No guarantee | Guaranteed delivery |
-| Speed | Faster | Slower (overhead) |
-| Ordering | No order guarantee | Ordered delivery |
-| Overhead | Low | High |
-| Acknowledgment | None | ACK for each packet |
-| Use Case | Real-time control | Reliable data transfer |
+| Feature        | UDP (this lab)     | TCP (Week 6)           |
+| -------------- | ------------------ | ---------------------- |
+| Connection     | Connectionless     | Connection-oriented    |
+| Reliability    | No guarantee       | Guaranteed delivery    |
+| Speed          | Faster             | Slower (overhead)      |
+| Ordering       | No order guarantee | Ordered delivery       |
+| Overhead       | Low                | High                   |
+| Acknowledgment | None               | ACK for each packet    |
+| Use Case       | Real-time control  | Reliable data transfer |
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Won't connect to WiFi | Server not running | Start server first (lab-w7-1-server) |
-| "Connecting to WiFi..." loop | Wrong SSID/password | Verify credentials match server |
-| LED not toggling | UDP packet lost | Try sending command again |
-| No response to input | Serial not ready | Wait for "Connected to WiFi" message |
-| Wrong LED toggling | Wrong number entered | Verify input 1-6 |
-| Multiple LEDs toggle | Send too fast | Wait 1 second between commands |
-| WiFi disconnects | Weak signal | Move ESP32s closer together |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Input ignored | Missing newline | Ensure Serial Monitor sends NL |
+| Issue                        | Possible Cause       | Solution                             |
+| ---------------------------- | -------------------- | ------------------------------------ |
+| Won't connect to WiFi        | Server not running   | Start server first (lab-w7-1-server) |
+| "Connecting to WiFi..." loop | Wrong SSID/password  | Verify credentials match server      |
+| LED not toggling             | UDP packet lost      | Try sending command again            |
+| No response to input         | Serial not ready     | Wait for "Connected to WiFi" message |
+| Wrong LED toggling           | Wrong number entered | Verify input 1-6                     |
+| Multiple LEDs toggle         | Send too fast        | Wait 1 second between commands       |
+| WiFi disconnects             | Weak signal          | Move ESP32s closer together          |
+| No serial output             | Wrong baud rate      | Set Serial Monitor to 9600 baud      |
+| Input ignored                | Missing newline      | Ensure Serial Monitor sends NL       |
 
 ## Code Reference
 
@@ -322,6 +329,7 @@ UDP Packet (simplified):
 ## Network Architecture
 
 This lab demonstrates **connectionless UDP communication**:
+
 - **Server**: Creates WiFi Access Point, controls 6 LEDs
 - **Client**: Sends LED commands via UDP (no connection setup)
 - **Protocol**: UDP for fast, low-latency control

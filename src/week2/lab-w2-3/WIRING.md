@@ -3,9 +3,11 @@
 **File**: `lab-w2-3.ino`
 
 ## Description
+
 This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using serial input. Users can set custom colors by sending RGB values (0-255) through the Serial Monitor in the format "R&G&B\n".
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - RGB LED (Common Cathode) × 1
 - Resistors 220Ω × 3
@@ -15,18 +17,18 @@ This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using s
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 11 | RGB LED Red | Red anode (through 220Ω resistor) | PWM capable |
-| Pin 10 | RGB LED Green | Green anode (through 220Ω resistor) | PWM capable |
-| Pin 9 | RGB LED Blue | Blue anode (through 220Ω resistor) | PWM capable |
-| GND | RGB LED | Common cathode (longest pin) | Common ground |
+| Arduino Pin | Component     | Connection                          | Notes         |
+| ----------- | ------------- | ----------------------------------- | ------------- |
+| Pin 11      | RGB LED Red   | Red anode (through 220Ω resistor)   | PWM capable   |
+| Pin 10      | RGB LED Green | Green anode (through 220Ω resistor) | PWM capable   |
+| Pin 9       | RGB LED Blue  | Blue anode (through 220Ω resistor)  | PWM capable   |
+| GND         | RGB LED       | Common cathode (longest pin)        | Common ground |
 
 ## ASCII Wiring Diagram
 
 ```
         Arduino UNO              RGB LED (Common Cathode)
-      ┌─────────────┐              
+      ┌─────────────┐
       │             │              ┌─────┐
       │   Pin 11 ●──┼──[220Ω]──────┤  R  │ Red
       │             │              │     │
@@ -37,20 +39,20 @@ This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using s
       │   GND    ●──┼──────────────┤ GND │ Common Cathode
       │             │              └─────┘
       │   USB    ●──┼─── To Computer (Serial)
-      └─────────────┘              
+      └─────────────┘
 ```
 
 ## RGB LED Pinout (Common Cathode)
 
 ```
     Looking at LED from front:
-    
+
      R   GND  G   B
      │    │   │   │
     [●]  [●] [●] [●]
      │    │   │   │
    Pin11 GND Pin10 Pin9
-   
+
    Note: Longest pin is GND (cathode)
 ```
 
@@ -66,8 +68,9 @@ This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using s
 ## Component-Specific Details
 
 ### RGB LED (Common Cathode)
+
 - **Type**: Common cathode RGB LED
-- **Forward Voltage**: 
+- **Forward Voltage**:
   - Red: ~2.0V
   - Green: ~3.0V
   - Blue: ~3.0V
@@ -77,6 +80,7 @@ This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using s
 - **Color Mixing**: Combine red, green, and blue to create any color
 
 ### PWM Values (0-255)
+
 - **0**: LED channel OFF (0% duty cycle)
 - **255**: LED channel at maximum brightness (100% duty cycle)
 - **127**: LED channel at ~50% brightness (50% duty cycle)
@@ -93,7 +97,7 @@ This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using s
 
 1. **Initialization**: Pins 9, 10, 11 configured as OUTPUT for PWM
 2. **Serial Input**: Program waits for input in format "R&G&B"
-3. **String Parsing**: 
+3. **String Parsing**:
    - Input split by '&' delimiter
    - Three values extracted: Red, Green, Blue
 4. **Validation**: Each value checked to be 0-255
@@ -106,6 +110,7 @@ This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using s
 **Format**: `R&G&B` followed by newline or 'N'
 
 **Examples**:
+
 - `255&0&0` → Pure Red
 - `0&255&0` → Pure Green
 - `0&0&255` → Pure Blue
@@ -139,34 +144,34 @@ This lab demonstrates PWM (Pulse Width Modulation) control of an RGB LED using s
 
 ## Common Colors
 
-| Color | R | G | B | Serial Input |
-|-------|---|---|---|--------------|
-| Red | 255 | 0 | 0 | `255&0&0` |
-| Green | 0 | 255 | 0 | `0&255&0` |
-| Blue | 0 | 0 | 255 | `0&0&255` |
-| Yellow | 255 | 255 | 0 | `255&255&0` |
-| Cyan | 0 | 255 | 255 | `0&255&255` |
-| Magenta | 255 | 0 | 255 | `255&0&255` |
-| White | 255 | 255 | 255 | `255&255&255` |
-| Orange | 255 | 128 | 0 | `255&128&0` |
-| Purple | 128 | 0 | 255 | `128&0&255` |
-| Pink | 255 | 128 | 128 | `255&128&128` |
-| Off | 0 | 0 | 0 | `0&0&0` |
+| Color   | R   | G   | B   | Serial Input  |
+| ------- | --- | --- | --- | ------------- |
+| Red     | 255 | 0   | 0   | `255&0&0`     |
+| Green   | 0   | 255 | 0   | `0&255&0`     |
+| Blue    | 0   | 0   | 255 | `0&0&255`     |
+| Yellow  | 255 | 255 | 0   | `255&255&0`   |
+| Cyan    | 0   | 255 | 255 | `0&255&255`   |
+| Magenta | 255 | 0   | 255 | `255&0&255`   |
+| White   | 255 | 255 | 255 | `255&255&255` |
+| Orange  | 255 | 128 | 0   | `255&128&0`   |
+| Purple  | 128 | 0   | 255 | `128&0&255`   |
+| Pink    | 255 | 128 | 128 | `255&128&128` |
+| Off     | 0   | 0   | 0   | `0&0&0`       |
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| LED not lighting | Wrong LED type | Ensure common cathode, not common anode |
-| Wrong colors | Pins swapped | Verify R=11, G=10, B=9 |
-| LED too dim | Wrong resistor | Verify 220Ω resistors |
-| LED too bright/hot | No resistors | Add 220Ω resistors to each channel |
-| One color missing | Bad connection | Check that channel's resistor and wire |
-| No serial response | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Error on valid input | Format issue | Use format "R&G&B" with & delimiters |
-| Inverted colors | Common anode LED | Code is for common cathode |
-| Flickering | Loose connection | Check all connections |
-| Values not updating | Code issue | Re-upload sketch |
+| Issue                | Possible Cause   | Solution                                |
+| -------------------- | ---------------- | --------------------------------------- |
+| LED not lighting     | Wrong LED type   | Ensure common cathode, not common anode |
+| Wrong colors         | Pins swapped     | Verify R=11, G=10, B=9                  |
+| LED too dim          | Wrong resistor   | Verify 220Ω resistors                   |
+| LED too bright/hot   | No resistors     | Add 220Ω resistors to each channel      |
+| One color missing    | Bad connection   | Check that channel's resistor and wire  |
+| No serial response   | Wrong baud rate  | Set Serial Monitor to 9600 baud         |
+| Error on valid input | Format issue     | Use format "R&G&B" with & delimiters    |
+| Inverted colors      | Common anode LED | Code is for common cathode              |
+| Flickering           | Loose connection | Check all connections                   |
+| Values not updating  | Code issue       | Re-upload sketch                        |
 
 ## Code Reference
 

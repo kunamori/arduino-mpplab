@@ -3,9 +3,11 @@
 **File**: `lab-w4-1.ino`
 
 ## Description
+
 This lab demonstrates analog sensor reading using a Light Dependent Resistor (LDR). The Arduino reads light intensity levels and displays them as a percentage (0-100%) on the Serial Monitor.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - LDR (Light Dependent Resistor) × 1
 - Resistor 10kΩ × 1 (pull-down resistor)
@@ -14,17 +16,17 @@ This lab demonstrates analog sensor reading using a Light Dependent Resistor (LD
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| A0 | LDR | Voltage divider midpoint | Analog input |
-| 5V | LDR | One terminal | Power supply |
-| GND | Resistor 10kΩ | One terminal | Ground |
+| Arduino Pin | Component     | Connection               | Notes        |
+| ----------- | ------------- | ------------------------ | ------------ |
+| A0          | LDR           | Voltage divider midpoint | Analog input |
+| 5V          | LDR           | One terminal             | Power supply |
+| GND         | Resistor 10kΩ | One terminal             | Ground       |
 
 ## ASCII Wiring Diagram
 
 ```
         Arduino UNO              LDR Circuit
-      ┌─────────────┐              
+      ┌─────────────┐
       │             │          5V
       │   5V     ●──┼───────────┬─────── LDR ─────┐
       │             │           │                  │
@@ -34,7 +36,7 @@ This lab demonstrates analog sensor reading using a Light Dependent Resistor (LD
       │             │           │
       │   GND    ●──┼───────────┘
       └─────────────┘
-      
+
       Voltage Divider:
       5V ──── LDR ──── A0 ──── 10kΩ ──── GND
 ```
@@ -50,8 +52,9 @@ This lab demonstrates analog sensor reading using a Light Dependent Resistor (LD
 ## Component-Specific Details
 
 ### LDR (Light Dependent Resistor)
+
 - **Type**: Photoresistor/photocell
-- **Resistance Range**: 
+- **Resistance Range**:
   - Bright light: ~1kΩ
   - Darkness: ~100kΩ or higher
 - **Response Time**: Typically 8-12ms
@@ -59,6 +62,7 @@ This lab demonstrates analog sensor reading using a Light Dependent Resistor (LD
 - **No polarity**: Can be connected either way
 
 ### 10kΩ Pull-down Resistor
+
 - **Purpose**: Forms voltage divider with LDR
 - **Function**: Converts resistance variation to voltage variation
 - **Value**: 10kΩ provides good sensitivity range
@@ -79,6 +83,7 @@ This lab demonstrates analog sensor reading using a Light Dependent Resistor (LD
    - In darkness: LDR resistance is high → Lower voltage at A0
 
 2. **Voltage Calculation**:
+
    ```
    V(A0) = 5V × (R_pulldown / (R_LDR + R_pulldown))
    ```
@@ -157,20 +162,21 @@ int LDR_DIS = map(LDR_OUT, 0, 900, 0, 100);  // If max reading is ~900
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Always reads 0% | LDR not connected to 5V | Check LDR to 5V connection |
-| Always reads 100% | Missing pull-down resistor | Verify 10kΩ resistor to GND |
-| No variation | Wrong resistor value | Confirm 10kΩ resistor (Brown-Black-Orange) |
-| Inverted readings | LDR and resistor swapped | Swap positions (LDR to 5V, resistor to GND) |
-| Erratic readings | Loose connections | Check all wire connections |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Reading stuck at mid-value | A0 floating | Ensure A0 connected to junction point |
-| Too sensitive/insensitive | Wrong resistor value | Try different pull-down values (4.7kΩ-22kΩ) |
+| Issue                      | Possible Cause             | Solution                                    |
+| -------------------------- | -------------------------- | ------------------------------------------- |
+| Always reads 0%            | LDR not connected to 5V    | Check LDR to 5V connection                  |
+| Always reads 100%          | Missing pull-down resistor | Verify 10kΩ resistor to GND                 |
+| No variation               | Wrong resistor value       | Confirm 10kΩ resistor (Brown-Black-Orange)  |
+| Inverted readings          | LDR and resistor swapped   | Swap positions (LDR to 5V, resistor to GND) |
+| Erratic readings           | Loose connections          | Check all wire connections                  |
+| No serial output           | Wrong baud rate            | Set Serial Monitor to 9600 baud             |
+| Reading stuck at mid-value | A0 floating                | Ensure A0 connected to junction point       |
+| Too sensitive/insensitive  | Wrong resistor value       | Try different pull-down values (4.7kΩ-22kΩ) |
 
 ## Understanding the Circuit
 
 **Voltage Divider Configuration**:
+
 ```
         5V
          │
@@ -184,6 +190,7 @@ int LDR_DIS = map(LDR_OUT, 0, 900, 0, 100);  // If max reading is ~900
 ```
 
 **How it works**:
+
 - More light → LDR resistance decreases → A0 voltage increases
 - Less light → LDR resistance increases → A0 voltage decreases
 

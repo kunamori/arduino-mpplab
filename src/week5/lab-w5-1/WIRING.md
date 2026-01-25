@@ -3,9 +3,11 @@
 **File**: `lab-w5-1.ino`
 
 ## Description
+
 This lab demonstrates a keypad-controlled servo motor system simulating a door lock. Users enter a 4-digit PIN via a 4×4 matrix keypad. If correct, a servo motor rotates to "unlock" the door. If incorrect, a buzzer sounds.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - 4×4 Matrix Keypad × 1
 - Servo Motor (SG90) × 1
@@ -15,20 +17,20 @@ This lab demonstrates a keypad-controlled servo motor system simulating a door l
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 9 | Keypad Row 1 | Row connection | Matrix scanning |
-| Pin 8 | Keypad Row 2 | Row connection | Matrix scanning |
-| Pin 7 | Keypad Row 3 | Row connection | Matrix scanning |
-| Pin 6 | Keypad Row 4 | Row connection | Matrix scanning |
-| Pin 5 | Keypad Col 1 | Column connection | Matrix scanning |
-| Pin 4 | Keypad Col 2 | Column connection | Matrix scanning |
-| Pin 3 | Keypad Col 3 | Column connection | Matrix scanning |
-| Pin 2 | Keypad Col 4 | Column connection | Matrix scanning |
-| Pin A0 | Servo Motor | Signal (orange/yellow) | PWM control |
-| Pin A1 | Buzzer | Positive terminal | Audio feedback |
-| 5V | Servo Motor | VCC (red) | Power supply |
-| GND | Servo Motor + Buzzer | GND (brown/black) | Common ground |
+| Arduino Pin | Component            | Connection             | Notes           |
+| ----------- | -------------------- | ---------------------- | --------------- |
+| Pin 9       | Keypad Row 1         | Row connection         | Matrix scanning |
+| Pin 8       | Keypad Row 2         | Row connection         | Matrix scanning |
+| Pin 7       | Keypad Row 3         | Row connection         | Matrix scanning |
+| Pin 6       | Keypad Row 4         | Row connection         | Matrix scanning |
+| Pin 5       | Keypad Col 1         | Column connection      | Matrix scanning |
+| Pin 4       | Keypad Col 2         | Column connection      | Matrix scanning |
+| Pin 3       | Keypad Col 3         | Column connection      | Matrix scanning |
+| Pin 2       | Keypad Col 4         | Column connection      | Matrix scanning |
+| Pin A0      | Servo Motor          | Signal (orange/yellow) | PWM control     |
+| Pin A1      | Buzzer               | Positive terminal      | Audio feedback  |
+| 5V          | Servo Motor          | VCC (red)              | Power supply    |
+| GND         | Servo Motor + Buzzer | GND (brown/black)      | Common ground   |
 
 ## ASCII Wiring Diagram
 
@@ -101,14 +103,16 @@ Key Mapping:
 ## Component-Specific Details
 
 ### 4×4 Matrix Keypad
+
 - **Type**: Membrane keypad with 16 keys
-- **Keys**: Numbers 0-9, Letters A-D, Symbols *, #
+- **Keys**: Numbers 0-9, Letters A-D, Symbols \*, #
 - **Pins**: 8 pins (4 rows + 4 columns)
 - **Operation**: Matrix scanning (rows and columns)
 - **Library**: Keypad library required
 - **Debouncing**: Handled by library
 
 ### Servo Motor (SG90)
+
 - **Type**: Standard micro servo
 - **Rotation**: 0° to 180°
 - **Control**: PWM signal on pin A0
@@ -121,6 +125,7 @@ Key Mapping:
   - Orange/Yellow: Signal
 
 ### Buzzer
+
 - **Type**: Active buzzer
 - **Voltage**: 5V
 - **Function**: Error notification (incorrect PIN)
@@ -232,17 +237,17 @@ const char setPIN[maxPIN] = {'A', 'B', 'C', 'D'};
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Keypad not responding | Wrong pin connections | Verify row/column pin mapping |
-| Wrong keys detected | Pins swapped | Check row pins: 9,8,7,6 and col pins: 5,4,3,2 |
-| Multiple keys from one press | Bounce/contact issue | Keypad library handles this; check keypad quality |
-| Servo not moving | No power | Verify servo VCC to 5V and GND connections |
-| Servo jitters | Insufficient power | Separate servo power or use external 5V supply |
-| Buzzer not sounding | Wrong polarity | Try swapping buzzer wires |
-| PIN always incorrect | String comparison issue | Ensure exactly 4 characters entered |
-| Serial garbled | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Servo doesn't return | Code logic | Servo returns to 0° at start of next cycle |
+| Issue                        | Possible Cause          | Solution                                          |
+| ---------------------------- | ----------------------- | ------------------------------------------------- |
+| Keypad not responding        | Wrong pin connections   | Verify row/column pin mapping                     |
+| Wrong keys detected          | Pins swapped            | Check row pins: 9,8,7,6 and col pins: 5,4,3,2     |
+| Multiple keys from one press | Bounce/contact issue    | Keypad library handles this; check keypad quality |
+| Servo not moving             | No power                | Verify servo VCC to 5V and GND connections        |
+| Servo jitters                | Insufficient power      | Separate servo power or use external 5V supply    |
+| Buzzer not sounding          | Wrong polarity          | Try swapping buzzer wires                         |
+| PIN always incorrect         | String comparison issue | Ensure exactly 4 characters entered               |
+| Serial garbled               | Wrong baud rate         | Set Serial Monitor to 9600 baud                   |
+| Servo doesn't return         | Code logic              | Servo returns to 0° at start of next cycle        |
 
 ## Code Reference
 

@@ -3,9 +3,11 @@
 **File**: `lab-w6-1-client.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi TCP client functionality. Two buttons control a counter (0-99) that sends values to a TCP server over WiFi. This is the **client** side that connects to the server (lab-w6-1-server).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - Push buttons × 2
 - Breadboard
@@ -13,17 +15,17 @@ This lab demonstrates ESP32 WiFi TCP client functionality. Two buttons control a
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 4 | Button 2 | Decrement button | INPUT_PULLUP |
-| GPIO 5 | Button 1 | Increment button | INPUT_PULLUP |
-| GND | Both buttons | Common ground | Shared GND |
+| ESP32 Pin | Component    | Connection       | Notes        |
+| --------- | ------------ | ---------------- | ------------ |
+| GPIO 4    | Button 2     | Decrement button | INPUT_PULLUP |
+| GPIO 5    | Button 1     | Increment button | INPUT_PULLUP |
+| GND       | Both buttons | Common ground    | Shared GND   |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT           Buttons
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │       ┌───┐
       │   GPIO 5 ●──┼───────┤ ● │  Button 1 (Increment)
       │             │       └─┬─┘
@@ -32,7 +34,7 @@ This lab demonstrates ESP32 WiFi TCP client functionality. Two buttons control a
       │             │     │ │ ● │  Button 2 (Decrement)
       │             │     │ └─┬─┘
       │   GND    ●──┼─────┴───┴──── GND
-      └─────────────┘       
+      └─────────────┘
 
       WiFi: Connects to "ESP32-Nihahaha" (server's AP)
       TCP: Connects to 192.168.4.1:6969
@@ -48,12 +50,14 @@ This lab demonstrates ESP32 WiFi TCP client functionality. Two buttons control a
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic (5V tolerant on some pins)
 - **GPIO**: Multiple GPIO pins available
 - **Built-in**: WiFi, Bluetooth, pull-up/pull-down resistors
 
 ### Push Buttons
+
 - **Configuration**: INPUT_PULLUP mode (internal pull-ups enabled)
 - **Active State**: LOW (0) when pressed
 - **Debouncing**: 20ms software delay
@@ -74,6 +78,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point)
@@ -169,6 +174,7 @@ WiFi connected
 ## Data Protocol
 
 **Message Format**:
+
 ```
 Counter Value + "&"
 
@@ -179,6 +185,7 @@ Examples:
 ```
 
 **TCP Transaction**:
+
 ```
 1. Button pressed
 2. client.connect(192.168.4.1, 6969)
@@ -189,16 +196,16 @@ Examples:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Won't connect to WiFi | Server not running | Start server first (lab-w6-1-server) |
-| "Connecting to WiFi..." loop | Wrong SSID/password | Verify credentials match server |
-| Button not responding | Wrong GPIO pin | Check GPIO 4 and 5 connections |
-| Multiple counts per press | Bouncing | Increase debounce delay (20ms→50ms) |
-| Server not updating | TCP connection failed | Check server is running and listening |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| WiFi disconnects | Weak signal | Move ESP32s closer together |
-| Wrong IP address | Server IP changed | Verify server IP is 192.168.4.1 |
+| Issue                        | Possible Cause        | Solution                              |
+| ---------------------------- | --------------------- | ------------------------------------- |
+| Won't connect to WiFi        | Server not running    | Start server first (lab-w6-1-server)  |
+| "Connecting to WiFi..." loop | Wrong SSID/password   | Verify credentials match server       |
+| Button not responding        | Wrong GPIO pin        | Check GPIO 4 and 5 connections        |
+| Multiple counts per press    | Bouncing              | Increase debounce delay (20ms→50ms)   |
+| Server not updating          | TCP connection failed | Check server is running and listening |
+| No serial output             | Wrong baud rate       | Set Serial Monitor to 9600 baud       |
+| WiFi disconnects             | Weak signal           | Move ESP32s closer together           |
+| Wrong IP address             | Server IP changed     | Verify server IP is 192.168.4.1       |
 
 ## Code Reference
 
@@ -243,7 +250,7 @@ void loop() {
     }
   }
   lastState1=state1;
-  
+
   // Button 2 (GPIO 4) - Decrement
   state2=digitalRead(4);
   if(state2!=lastState2) {
@@ -259,7 +266,7 @@ void loop() {
     }
   }
   lastState2=state2;
-  
+
   Serial.println(x);
 }
 ```
@@ -279,6 +286,7 @@ WiFi.status() values:
 ## Network Architecture
 
 This lab demonstrates **client-server TCP communication**:
+
 - **Server**: Creates WiFi Access Point, listens for connections
 - **Client**: Connects to AP, initiates TCP connections to send data
 - **Protocol**: TCP ensures reliable data delivery
@@ -286,13 +294,13 @@ This lab demonstrates **client-server TCP communication**:
 
 ## Comparison: TCP vs UDP
 
-| Feature | TCP (this lab) | UDP (Week 7) |
-|---------|----------------|--------------|
-| Connection | Connection-oriented | Connectionless |
-| Reliability | Guaranteed delivery | Best-effort |
-| Ordering | Ordered | May arrive out of order |
-| Overhead | Higher | Lower |
-| Use Case | Reliable data transfer | Fast, real-time data |
+| Feature     | TCP (this lab)         | UDP (Week 7)            |
+| ----------- | ---------------------- | ----------------------- |
+| Connection  | Connection-oriented    | Connectionless          |
+| Reliability | Guaranteed delivery    | Best-effort             |
+| Ordering    | Ordered                | May arrive out of order |
+| Overhead    | Higher                 | Lower                   |
+| Use Case    | Reliable data transfer | Fast, real-time data    |
 
 ## Applications
 

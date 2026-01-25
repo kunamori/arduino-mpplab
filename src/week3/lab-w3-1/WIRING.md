@@ -3,9 +3,11 @@
 **File**: `lab-w3-1.ino`
 
 ## Description
+
 This lab demonstrates hardware interrupts using push buttons. Two buttons with interrupt functionality control a counter (0-99) that outputs to the Serial Monitor. This improves on lab-w2-1 by using hardware interrupts instead of polling.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - Push buttons × 2
 - Capacitors 0.001μF (1nF) × 2
@@ -14,17 +16,17 @@ This lab demonstrates hardware interrupts using push buttons. Two buttons with i
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 2 | PUSH_SW_1 | Button terminal 1 | Increment (INT0 interrupt) |
-| Pin 3 | PUSH_SW_2 | Button terminal 1 | Decrement (INT1 interrupt) |
-| GND | Both buttons | Button terminal 2 | Common ground |
+| Arduino Pin | Component    | Connection        | Notes                      |
+| ----------- | ------------ | ----------------- | -------------------------- |
+| Pin 2       | PUSH_SW_1    | Button terminal 1 | Increment (INT0 interrupt) |
+| Pin 3       | PUSH_SW_2    | Button terminal 1 | Decrement (INT1 interrupt) |
+| GND         | Both buttons | Button terminal 2 | Common ground              |
 
 ## ASCII Wiring Diagram
 
 ```
         Arduino UNO              Components
-      ┌─────────────┐              
+      ┌─────────────┐
       │             │          ┌───┐
       │   Pin 2  ●──┼────┬─────┤ ● │  PUSH_SW_1 (Increment)
       │  (INT0)     │  [1nF]   └─┬─┘
@@ -35,7 +37,7 @@ This lab demonstrates hardware interrupts using push buttons. Two buttons with i
       │             │    │   │ └─┬─┘
       │             │   GND  │   │
       │   GND    ●──┼────────┴───┴───── GND
-      └─────────────┘              
+      └─────────────┘
 ```
 
 ## Breadboard Layout
@@ -50,6 +52,7 @@ This lab demonstrates hardware interrupts using push buttons. Two buttons with i
 ## Component-Specific Details
 
 ### Push Buttons
+
 - **Type**: Momentary tactile switches
 - **Configuration**: INPUT_PULLUP mode (internal pull-up resistors enabled)
 - **Active State**: LOW (0) when pressed, HIGH (1) when released
@@ -58,6 +61,7 @@ This lab demonstrates hardware interrupts using push buttons. Two buttons with i
 - **Hardware Debouncing (Optional)**: 1nF capacitors
 
 ### Capacitors (Optional Hardware Debouncing)
+
 - **Value**: 0.001μF (1nF)
 - **Purpose**: Filter mechanical bounce
 - **Connection**: Between pin and GND
@@ -75,7 +79,7 @@ This lab demonstrates hardware interrupts using push buttons. Two buttons with i
 
 ## How It Works
 
-1. **Initialization**: 
+1. **Initialization**:
    - Pins 2 and 3 configured as INPUT_PULLUP
    - Interrupts attached to pins 2 and 3 with FALLING trigger
 2. **Interrupt Service Routine (ISR)**:
@@ -93,12 +97,13 @@ This lab demonstrates hardware interrupts using push buttons. Two buttons with i
 
 ## Hardware Interrupts on Arduino UNO
 
-| Pin | Interrupt | Function |
-|-----|-----------|----------|
-| Pin 2 | INT0 | External interrupt 0 |
-| Pin 3 | INT1 | External interrupt 1 |
+| Pin   | Interrupt | Function             |
+| ----- | --------- | -------------------- |
+| Pin 2 | INT0      | External interrupt 0 |
+| Pin 3 | INT1      | External interrupt 1 |
 
 **Trigger Modes**:
+
 - LOW: Trigger when pin is LOW
 - CHANGE: Trigger on any change
 - RISING: Trigger on LOW to HIGH
@@ -140,20 +145,21 @@ This lab demonstrates hardware interrupts using push buttons. Two buttons with i
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Button not responding | Loose connection | Check button and wire connections |
-| Multiple counts per press | Insufficient debouncing | Increase debounce time (200ms→300ms) |
-| Always reads pressed | Wrong wiring | Ensure button connects to GND, not VCC |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Inverted logic | Missing INPUT_PULLUP | Verify pinMode uses INPUT_PULLUP |
-| Erratic behavior | Missing capacitor | Add 1nF capacitors for hardware debouncing |
-| ISR not firing | Wrong interrupt mode | Verify FALLING mode is used |
-| Counter doesn't change | ISR not attached | Check attachInterrupt() calls |
+| Issue                     | Possible Cause          | Solution                                   |
+| ------------------------- | ----------------------- | ------------------------------------------ |
+| Button not responding     | Loose connection        | Check button and wire connections          |
+| Multiple counts per press | Insufficient debouncing | Increase debounce time (200ms→300ms)       |
+| Always reads pressed      | Wrong wiring            | Ensure button connects to GND, not VCC     |
+| No serial output          | Wrong baud rate         | Set Serial Monitor to 9600 baud            |
+| Inverted logic            | Missing INPUT_PULLUP    | Verify pinMode uses INPUT_PULLUP           |
+| Erratic behavior          | Missing capacitor       | Add 1nF capacitors for hardware debouncing |
+| ISR not firing            | Wrong interrupt mode    | Verify FALLING mode is used                |
+| Counter doesn't change    | ISR not attached        | Check attachInterrupt() calls              |
 
 ## Understanding Interrupts
 
 **Traditional Polling (lab-w2-1)**:
+
 ```
 loop() {
   Check Button 1 → Check Button 2 → Other tasks → Repeat
@@ -162,6 +168,7 @@ loop() {
 ```
 
 **Interrupt-Driven (lab-w3-1)**:
+
 ```
 loop() {
   Other tasks (interrupted when button pressed)
@@ -211,10 +218,10 @@ void count_func_i() {
 
 ## Comparison with lab-w2-1
 
-| Feature | lab-w2-1 (Polling) | lab-w3-1 (Interrupts) |
-|---------|-------------------|----------------------|
-| Response Time | Loop-dependent | Immediate |
-| CPU Efficiency | Continuous polling | Event-driven |
-| Debouncing | 50ms delay | 200ms timestamp |
-| Code Complexity | Simpler | More advanced |
-| Pins Used | Any digital | Must use INT pins |
+| Feature         | lab-w2-1 (Polling) | lab-w3-1 (Interrupts) |
+| --------------- | ------------------ | --------------------- |
+| Response Time   | Loop-dependent     | Immediate             |
+| CPU Efficiency  | Continuous polling | Event-driven          |
+| Debouncing      | 50ms delay         | 200ms timestamp       |
+| Code Complexity | Simpler            | More advanced         |
+| Pins Used       | Any digital        | Must use INT pins     |

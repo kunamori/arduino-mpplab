@@ -3,9 +3,11 @@
 **File**: `lab-w6-2-client.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi TCP client for controlling relays remotely. Two buttons toggle the state of two relays on a TCP server over WiFi. Each button press sends ON/OFF commands to the server. This is the **client** side that connects to the server (lab-w6-2-server).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - Push buttons × 2
 - Breadboard
@@ -13,17 +15,17 @@ This lab demonstrates ESP32 WiFi TCP client for controlling relays remotely. Two
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 5 | Button 1 | Relay 1 control | INPUT_PULLUP |
-| GPIO 4 | Button 2 | Relay 2 control | INPUT_PULLUP |
-| GND | Both buttons | Common ground | Shared GND |
+| ESP32 Pin | Component    | Connection      | Notes        |
+| --------- | ------------ | --------------- | ------------ |
+| GPIO 5    | Button 1     | Relay 1 control | INPUT_PULLUP |
+| GPIO 4    | Button 2     | Relay 2 control | INPUT_PULLUP |
+| GND       | Both buttons | Common ground   | Shared GND   |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT           Buttons
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │       ┌───┐
       │   GPIO 5 ●──┼───────┤ ● │  Button 1 (Relay 1 Toggle)
       │             │       └─┬─┘
@@ -32,11 +34,11 @@ This lab demonstrates ESP32 WiFi TCP client for controlling relays remotely. Two
       │             │     │ │ ● │  Button 2 (Relay 2 Toggle)
       │             │     │ └─┬─┘
       │   GND    ●──┼─────┴───┴──── GND
-      └─────────────┘       
+      └─────────────┘
 
       WiFi: Connects to "ESP32-Nihahaha" (server's AP)
       TCP: Connects to 192.168.4.1:6969
-      
+
       Commands Sent:
       Button 1: "ON1&" or "OFF1&"
       Button 2: "ON2&" or "OFF2&"
@@ -52,12 +54,14 @@ This lab demonstrates ESP32 WiFi TCP client for controlling relays remotely. Two
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic (5V tolerant on some pins)
 - **GPIO**: Multiple GPIO pins available
 - **Built-in**: WiFi, Bluetooth, pull-up/pull-down resistors
 
 ### Push Buttons
+
 - **Configuration**: INPUT_PULLUP mode (internal pull-ups enabled)
 - **Active State**: LOW (0) when pressed
 - **Debouncing**: 20ms software delay
@@ -86,6 +90,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point)
@@ -182,6 +187,7 @@ WiFi connected
 ## Data Protocol
 
 **Message Format**:
+
 ```
 Command + "&"
 
@@ -195,6 +201,7 @@ Relay 2 Commands:
 ```
 
 **TCP Transaction**:
+
 ```
 1. Button pressed
 2. Check current relay state
@@ -232,16 +239,16 @@ Button 1 State Machine:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Won't connect to WiFi | Server not running | Start server first (lab-w6-2-server) |
-| "Connecting to WiFi..." loop | Wrong SSID/password | Verify credentials match server |
-| Button not responding | Wrong GPIO pin | Check GPIO 4 and 5 connections |
-| Multiple toggles per press | Bouncing | Increase debounce delay (20ms→50ms) |
-| Relay not responding | TCP connection failed | Check server is running and listening |
-| Relay state out of sync | State tracking issue | Reset both ESP32s to sync states |
-| WiFi disconnects | Weak signal | Move ESP32s closer together |
-| Wrong relay toggling | Buttons swapped | Verify GPIO 5→Relay1, GPIO 4→Relay2 |
+| Issue                        | Possible Cause        | Solution                              |
+| ---------------------------- | --------------------- | ------------------------------------- |
+| Won't connect to WiFi        | Server not running    | Start server first (lab-w6-2-server)  |
+| "Connecting to WiFi..." loop | Wrong SSID/password   | Verify credentials match server       |
+| Button not responding        | Wrong GPIO pin        | Check GPIO 4 and 5 connections        |
+| Multiple toggles per press   | Bouncing              | Increase debounce delay (20ms→50ms)   |
+| Relay not responding         | TCP connection failed | Check server is running and listening |
+| Relay state out of sync      | State tracking issue  | Reset both ESP32s to sync states      |
+| WiFi disconnects             | Weak signal           | Move ESP32s closer together           |
+| Wrong relay toggling         | Buttons swapped       | Verify GPIO 5→Relay1, GPIO 4→Relay2   |
 
 ## Code Reference
 
@@ -335,7 +342,7 @@ Physical Button Press:
   HIGH ──┐    ┌─── Bouncing ───┐    ┌─── Stable LOW
          │    │                │    │
          └────┘                └────┘
-         
+
 Software Debouncing:
   1. Detect edge (state change)
   2. Wait 20ms (debounce delay)
@@ -346,6 +353,7 @@ Software Debouncing:
 ## Network Architecture
 
 This lab demonstrates **client-server relay control**:
+
 - **Server**: Creates WiFi Access Point, controls physical relays
 - **Client**: Connects to AP, sends relay commands via TCP
 - **Protocol**: TCP ensures reliable command delivery

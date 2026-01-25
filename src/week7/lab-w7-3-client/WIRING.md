@@ -3,9 +3,11 @@
 **File**: `lab-w7-3-client.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi UDP client for controlling an RGB LED remotely using a button and potentiometer. The button cycles through RGB colors (R/G/B), and the potentiometer adjusts brightness (0-255). The client sends periodic heartbeat packets and responds to server acknowledgments. This is the **client** side that provides user input to control the RGB LED on the server (lab-w7-3-server).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - Push button × 1
 - Potentiometer (10kΩ) × 1
@@ -14,18 +16,18 @@ This lab demonstrates ESP32 WiFi UDP client for controlling an RGB LED remotely 
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 4 | Button | Color selector | INPUT_PULLUP |
-| GPIO 34 | Potentiometer | Brightness control (wiper) | ADC1_CH6, input only |
-| 3.3V | Potentiometer | One outer pin | Power |
-| GND | Button + Pot | Common ground | Shared GND |
+| ESP32 Pin | Component     | Connection                 | Notes                |
+| --------- | ------------- | -------------------------- | -------------------- |
+| GPIO 4    | Button        | Color selector             | INPUT_PULLUP         |
+| GPIO 34   | Potentiometer | Brightness control (wiper) | ADC1_CH6, input only |
+| 3.3V      | Potentiometer | One outer pin              | Power                |
+| GND       | Button + Pot  | Common ground              | Shared GND           |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT        Button    Potentiometer
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │       ┌───┐         ┌─────┐
       │   GPIO 4 ●──┼───────┤ ● │         │  1  │  3.3V
       │             │       └─┬─┘         │     │
@@ -36,15 +38,15 @@ This lab demonstrates ESP32 WiFi UDP client for controlling an RGB LED remotely 
       │  3.3V    ●──┼─────────┼───────────┤  3  │  Outer
       │             │         │           └─────┘
       │   GND    ●──┼─────────┴──────────────────── GND
-      └─────────────┘       
+      └─────────────┘
 
       WiFi: Connects to "ESP32-Nihahaha" (server's AP)
       UDP: Sends to 192.168.4.1:6969
       Client IP: 192.168.4.5 (static)
-      
+
       Button: Cycles through R(0), G(1), B(2)
       Potentiometer: Sets brightness 0-255
-      
+
       Data Sent:
         Heartbeat: "10_20&" (every 1 second)
         RGB Data:  "0_180&" (color_brightness)
@@ -68,6 +70,7 @@ This lab demonstrates ESP32 WiFi UDP client for controlling an RGB LED remotely 
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic
 - **ADC**: 12-bit resolution (0-4095) on GPIO 34
@@ -76,12 +79,14 @@ This lab demonstrates ESP32 WiFi UDP client for controlling an RGB LED remotely 
 - **GPIO 4**: INPUT_PULLUP for button
 
 ### Push Button
+
 - **Configuration**: INPUT_PULLUP mode (internal pull-up enabled)
 - **Active State**: LOW (0) when pressed
 - **Debouncing**: 20ms software delay
 - **Function**: Cycles through RGB color selection (0→1→2→0...)
 
 ### Potentiometer
+
 - **Type**: Rotary potentiometer
 - **Resistance**: 10kΩ (1kΩ to 100kΩ works)
 - **Rotation**: ~270° (varies by model)
@@ -118,6 +123,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Client IP**: 192.168.4.5 (static configuration)
@@ -246,6 +252,7 @@ Connecting to WiFi...
 ## Data Protocol
 
 **Heartbeat Format** (Client → Server):
+
 ```
 "10_20&"
 
@@ -254,6 +261,7 @@ Dummy data, not processed by server for RGB control
 ```
 
 **RGB Data Format** (Client → Server):
+
 ```
 "color_brightness&"
 
@@ -267,11 +275,12 @@ Color codes:
   0 = Red (GPIO 4)
   1 = Green (GPIO 2)
   2 = Blue (GPIO 15)
-  
+
 Brightness: 0-255 (PWM duty cycle)
 ```
 
 **Acknowledgment Format** (Server → Client):
+
 ```
 "A"
 
@@ -280,6 +289,7 @@ Triggers client to send updated RGB values
 ```
 
 **UDP Transaction**:
+
 ```
 1. Every 1 second: Client sends "10_20&" (heartbeat)
 2. Button pressed: selRGB_BTN increments
@@ -316,18 +326,18 @@ Color Selection State Machine:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Won't connect to WiFi | Server not running | Start server first (lab-w7-3-server) |
-| Wrong IP address | Static IP not set | Verify WiFi.config() before WiFi.begin() |
-| Button not responding | Wrong GPIO pin | Check GPIO 4 connection |
-| Multiple color changes | Bouncing | Increase debounce delay (20ms→50ms) |
-| Pot not responding | Wrong GPIO | GPIO 34 is input-only, check connection |
-| Erratic pot readings | Floating pin | Check pot wiring to 3.3V and GND |
-| RGB LED not changing | UDP packet lost | Check server running and responsive |
-| No brightness control | ADC not reading | Verify GPIO 34 ADC connection |
-| WiFi disconnects | Weak signal | Move ESP32s closer together |
-| Wrong color displayed | Color index wrong | Verify selRGB_BTN: 0=R, 1=G, 2=B |
+| Issue                  | Possible Cause     | Solution                                 |
+| ---------------------- | ------------------ | ---------------------------------------- |
+| Won't connect to WiFi  | Server not running | Start server first (lab-w7-3-server)     |
+| Wrong IP address       | Static IP not set  | Verify WiFi.config() before WiFi.begin() |
+| Button not responding  | Wrong GPIO pin     | Check GPIO 4 connection                  |
+| Multiple color changes | Bouncing           | Increase debounce delay (20ms→50ms)      |
+| Pot not responding     | Wrong GPIO         | GPIO 34 is input-only, check connection  |
+| Erratic pot readings   | Floating pin       | Check pot wiring to 3.3V and GND         |
+| RGB LED not changing   | UDP packet lost    | Check server running and responsive      |
+| No brightness control  | ADC not reading    | Verify GPIO 34 ADC connection            |
+| WiFi disconnects       | Weak signal        | Move ESP32s closer together              |
+| Wrong color displayed  | Color index wrong  | Verify selRGB_BTN: 0=R, 1=G, 2=B         |
 
 ## Code Reference
 
@@ -425,6 +435,7 @@ void loop() {
 ## Network Architecture
 
 This lab demonstrates **bidirectional UDP communication with acknowledgments**:
+
 - **Server**: Creates WiFi Access Point, controls RGB LED
 - **Client**: Sends color/brightness data, receives acknowledgments
 - **Protocol**: UDP with custom acknowledgment mechanism

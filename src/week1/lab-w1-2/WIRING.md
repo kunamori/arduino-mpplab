@@ -3,9 +3,11 @@
 **File**: `lab-w1-2.ino`
 
 ## Description
+
 This lab demonstrates interactive LED control via Serial Monitor input. Users can toggle individual LEDs on/off by sending LED numbers (1-6) through the serial interface, with buzzer feedback.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - LEDs (5mm, various colors) × 6
 - Resistor 220Ω × 1
@@ -16,23 +18,23 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 10 | LED_1 | Anode (positive leg) | LED number 1 |
-| Pin 9 | LED_2 | Anode (positive leg) | LED number 2 |
-| Pin 8 | LED_3 | Anode (positive leg) | LED number 3 |
-| Pin 7 | LED_4 | Anode (positive leg) | LED number 4 |
-| Pin 6 | LED_5 | Anode (positive leg) | LED number 5 |
-| Pin 5 | LED_6 | Anode (positive leg) | LED number 6 |
-| Pin 4 | Buzzer | Positive terminal | Input confirmation |
-| GND | All LEDs & Buzzer | Via 220Ω resistor/Direct | Common ground |
+| Arduino Pin | Component         | Connection               | Notes              |
+| ----------- | ----------------- | ------------------------ | ------------------ |
+| Pin 10      | LED_1             | Anode (positive leg)     | LED number 1       |
+| Pin 9       | LED_2             | Anode (positive leg)     | LED number 2       |
+| Pin 8       | LED_3             | Anode (positive leg)     | LED number 3       |
+| Pin 7       | LED_4             | Anode (positive leg)     | LED number 4       |
+| Pin 6       | LED_5             | Anode (positive leg)     | LED number 5       |
+| Pin 5       | LED_6             | Anode (positive leg)     | LED number 6       |
+| Pin 4       | Buzzer            | Positive terminal        | Input confirmation |
+| GND         | All LEDs & Buzzer | Via 220Ω resistor/Direct | Common ground      |
 
 ## ASCII Wiring Diagram
 
 ```
         Arduino UNO                    Components
-      ┌─────────────┐              
-      │             │              
+      ┌─────────────┐
+      │             │
       │   Pin 10 ●──┼────────────LED1+  ──┐
       │   Pin 9  ●──┼────────────LED2+  ──┤
       │   Pin 8  ●──┼────────────LED3+  ──┤
@@ -40,10 +42,10 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
       │   Pin 6  ●──┼────────────LED5+  ──┤
       │   Pin 5  ●──┼────────────LED6+  ──┤
       │   Pin 4  ●──┼────────────Buzzer+ ─┘
-      │             │              
+      │             │
       │   GND    ●──┼─────────────────────────
       │   USB    ●──┼─── To Computer (Serial)
-      └─────────────┘              
+      └─────────────┘
 ```
 
 ## Breadboard Layout
@@ -60,6 +62,7 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 ## Component-Specific Details
 
 ### LEDs
+
 - **Type**: Standard 5mm LEDs
 - **Forward Voltage**: ~2V
 - **Current**: ~20mA per LED
@@ -68,6 +71,7 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 - **Note**: Multiple LEDs can be on simultaneously; total current increases with each active LED
 
 ### Buzzer
+
 - **Type**: Active buzzer (requires DC voltage)
 - **Voltage**: 5V
 - **Connection**: Direct connection to pin 4 (no resistor needed)
@@ -87,10 +91,10 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 2. **Serial Input**: Program waits for serial input (numbers 1-6)
 3. **Input Validation**: Checks if input is between 1 and 6
 4. **State Check**: Reads current LED state from `ledStatus[]` array
-5. **Toggle Logic**: 
+5. **Toggle Logic**:
    - If LED is OFF (0), turn it ON (1)
    - If LED is ON (1), turn it OFF (0)
-6. **Feedback**: 
+6. **Feedback**:
    - Buzzer beeps to confirm input
    - Serial Monitor displays LED number and new state
 7. **Error Handling**: Invalid inputs display "ERROR: INPUT_USER"
@@ -98,7 +102,7 @@ This lab demonstrates interactive LED control via Serial Monitor input. Users ca
 ## Serial Input Format
 
 - **Valid Input**: Single digit from 1 to 6, followed by newline (`\n`)
-- **Example**: 
+- **Example**:
   - Type `1` and press Enter → Toggles LED_1 (pin 10)
   - Type `3` and press Enter → Toggles LED_3 (pin 8)
 - **Invalid Input**: Any number < 1 or > 6, or non-numeric input
@@ -133,16 +137,16 @@ LED: 6 ON
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| No serial response | Wrong baud rate | Ensure Serial Monitor is set to 9600 baud |
-| LED not responding | Wrong pin connection | Verify pin numbers match LED positions |
-| LED not lighting | Wrong polarity | Ensure anode (long leg) to pin, cathode to resistor |
-| LED too dim | Wrong resistor value | Verify 220Ω resistor (Red-Red-Brown) |
-| Buzzer not working | Wrong polarity | Check positive to pin 4, negative to GND |
-| Error on valid input | Input format issue | Ensure newline character is sent (press Enter) |
-| State not toggling | Array not updating | Re-upload sketch |
-| Random LED behavior | Noise on serial | Check USB cable quality |
+| Issue                | Possible Cause       | Solution                                            |
+| -------------------- | -------------------- | --------------------------------------------------- |
+| No serial response   | Wrong baud rate      | Ensure Serial Monitor is set to 9600 baud           |
+| LED not responding   | Wrong pin connection | Verify pin numbers match LED positions              |
+| LED not lighting     | Wrong polarity       | Ensure anode (long leg) to pin, cathode to resistor |
+| LED too dim          | Wrong resistor value | Verify 220Ω resistor (Red-Red-Brown)                |
+| Buzzer not working   | Wrong polarity       | Check positive to pin 4, negative to GND            |
+| Error on valid input | Input format issue   | Ensure newline character is sent (press Enter)      |
+| State not toggling   | Array not updating   | Re-upload sketch                                    |
+| Random LED behavior  | Noise on serial      | Check USB cable quality                             |
 
 ## Code Reference
 

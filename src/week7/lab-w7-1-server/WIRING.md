@@ -3,9 +3,11 @@
 **File**: `lab-w7-1-server.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi UDP server for controlling 6 LEDs. The ESP32 creates a WiFi Access Point and listens for UDP packets containing LED numbers (1-6). Each packet toggles the corresponding LED on/off. Unlike TCP, UDP is connectionless and ideal for real-time control. This is the **server** side that controls 6 physical LEDs.
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - LEDs × 6 (any color)
 - 220Ω resistors × 1 (shared for all LEDs)
@@ -14,21 +16,21 @@ This lab demonstrates ESP32 WiFi UDP server for controlling 6 LEDs. The ESP32 cr
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 13 | LED 1 | Anode (+) | Red/Color 1 |
-| GPIO 12 | LED 2 | Anode (+) | Green/Color 2 |
-| GPIO 14 | LED 3 | Anode (+) | Blue/Color 3 |
-| GPIO 27 | LED 4 | Anode (+) | Yellow/Color 4 |
-| GPIO 26 | LED 5 | Anode (+) | White/Color 5 |
-| GPIO 25 | LED 6 | Anode (+) | Any color 6 |
-| GND | All LEDs (cathodes) | Common cathode → 220Ω resistor → GND | Shared resistor |
+| ESP32 Pin | Component           | Connection                           | Notes           |
+| --------- | ------------------- | ------------------------------------ | --------------- |
+| GPIO 13   | LED 1               | Anode (+)                            | Red/Color 1     |
+| GPIO 12   | LED 2               | Anode (+)                            | Green/Color 2   |
+| GPIO 14   | LED 3               | Anode (+)                            | Blue/Color 3    |
+| GPIO 27   | LED 4               | Anode (+)                            | Yellow/Color 4  |
+| GPIO 26   | LED 5               | Anode (+)                            | White/Color 5   |
+| GPIO 25   | LED 6               | Anode (+)                            | Any color 6     |
+| GND       | All LEDs (cathodes) | Common cathode → 220Ω resistor → GND | Shared resistor |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT              LEDs (×6)
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │       LED1  LED2  LED3  LED4  LED5  LED6
       │  GPIO 13 ●──┼────────┤►├───┐
       │             │               │
@@ -49,7 +51,7 @@ This lab demonstrates ESP32 WiFi UDP server for controlling 6 LEDs. The ESP32 cr
       WiFi: Creates AP "ESP32-Nihahaha"
       UDP Server: Listens on port 6969
       IP Address: 192.168.4.1
-      
+
       Receives: "1" to "6" (toggles corresponding LED)
 ```
 
@@ -71,6 +73,7 @@ This lab demonstrates ESP32 WiFi UDP server for controlling 6 LEDs. The ESP32 cr
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V power
 - **GPIO Output**: 3.3V (sufficient for LED with resistor)
@@ -78,6 +81,7 @@ This lab demonstrates ESP32 WiFi UDP server for controlling 6 LEDs. The ESP32 cr
 - **Current per GPIO**: Max 40mA (safe for single LED)
 
 ### LEDs
+
 - **Type**: Standard 5mm or 3mm LEDs
 - **Forward Voltage**: ~2V (red) to ~3.3V (blue/white)
 - **Forward Current**: 20mA (typical)
@@ -87,6 +91,7 @@ This lab demonstrates ESP32 WiFi UDP server for controlling 6 LEDs. The ESP32 cr
   - **Cathode (-)**: Short leg, connects to GND via resistor
 
 ### Resistor Configuration
+
 - **Value**: 220Ω (red-red-brown)
 - **Configuration**: Single resistor on common cathode to GND
 - **Power Rating**: 1/4W sufficient
@@ -120,6 +125,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point IP)
@@ -236,10 +242,11 @@ LED 2 OFF
 ## Data Protocol
 
 **Message Format**:
+
 ```
 UDP Packet:
   LED Number (string, 1 character)
-  
+
 Examples:
   "1"  → Toggle LED 1
   "2"  → Toggle LED 2
@@ -249,6 +256,7 @@ Examples:
 ```
 
 **UDP Server Flow**:
+
 ```
 1. Server listens on port 6969
 2. Client sends UDP packet "1"
@@ -286,18 +294,18 @@ LED State Toggle Logic:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| All LEDs always on | Wiring reversed | Check anode to GPIO, cathode to GND |
-| LED very dim | Resistor too high | Verify 220Ω, not 2.2kΩ |
-| LED doesn't light | Blown LED | Test LED with 3.3V/GND directly |
-| LEDs too bright | No resistor | Add 220Ω resistor to common ground |
-| Wrong LED toggles | GPIO mismatch | Verify pin assignments |
-| Random LED behavior | Floating pins | Check all connections secure |
-| No WiFi AP visible | Code not running | Check Serial Monitor, verify upload |
-| UDP not received | Client wrong IP | Verify client sends to 192.168.4.1 |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| ESP32 resets | Too much current | Check wiring, ensure shared resistor |
+| Issue               | Possible Cause    | Solution                             |
+| ------------------- | ----------------- | ------------------------------------ |
+| All LEDs always on  | Wiring reversed   | Check anode to GPIO, cathode to GND  |
+| LED very dim        | Resistor too high | Verify 220Ω, not 2.2kΩ               |
+| LED doesn't light   | Blown LED         | Test LED with 3.3V/GND directly      |
+| LEDs too bright     | No resistor       | Add 220Ω resistor to common ground   |
+| Wrong LED toggles   | GPIO mismatch     | Verify pin assignments               |
+| Random LED behavior | Floating pins     | Check all connections secure         |
+| No WiFi AP visible  | Code not running  | Check Serial Monitor, verify upload  |
+| UDP not received    | Client wrong IP   | Verify client sends to 192.168.4.1   |
+| No serial output    | Wrong baud rate   | Set Serial Monitor to 9600 baud      |
+| ESP32 resets        | Too much current  | Check wiring, ensure shared resistor |
 
 ## Code Reference
 
@@ -376,15 +384,15 @@ Single 220Ω Resistor Configuration:
 
 Worst Case (All 6 LEDs ON):
   ESP32 3.3V → LED (2V drop) → 220Ω → GND
-  
+
   Voltage across resistor: 3.3V - 2V = 1.3V
   Current per LED: I = V/R = 1.3V / 220Ω ≈ 6mA
-  
+
   Total current (6 LEDs): 6 × 6mA = 36mA
-  
+
   ✓ Safe: ESP32 can source 40mA per pin
   ✓ LED safe: 6mA < 20mA max
-  
+
 Note: Each LED gets less current, so brightness reduced
       compared to individual resistors. Acceptable for indicators.
 ```

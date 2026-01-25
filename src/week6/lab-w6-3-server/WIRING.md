@@ -3,9 +3,11 @@
 **File**: `lab-w6-3-server.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi TCP server for servo motor control. The ESP32 creates a WiFi Access Point and listens for angle commands from a TCP client (lab-w6-3-client). The servo motor rotates to the received angle (0-180°) and sends an acknowledgment back to the client. This is the **server** side that controls the physical servo motor.
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - Servo Motor (SG90 or similar) × 1
 - Breadboard
@@ -14,17 +16,17 @@ This lab demonstrates ESP32 WiFi TCP server for servo motor control. The ESP32 c
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 26 | Servo Motor | Signal (orange/yellow) | PWM control |
-| 5V | Servo Motor | VCC (red) | Power supply |
-| GND | Servo Motor | GND (brown/black) | Common ground |
+| ESP32 Pin | Component   | Connection             | Notes         |
+| --------- | ----------- | ---------------------- | ------------- |
+| GPIO 26   | Servo Motor | Signal (orange/yellow) | PWM control   |
+| 5V        | Servo Motor | VCC (red)              | Power supply  |
+| GND       | Servo Motor | GND (brown/black)      | Common ground |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT         Servo Motor (SG90)
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │           ┌─────────┐
       │  GPIO 26 ●──┼───────────┤  Signal │  Orange/Yellow
       │             │           │         │
@@ -32,14 +34,14 @@ This lab demonstrates ESP32 WiFi TCP server for servo motor control. The ESP32 c
       │             │           │         │
       │   GND    ●──┼───────────┤  GND    │  Brown/Black
       └─────────────┘           └─────────┘
-      
+
       WiFi: Creates AP "ESP32-Nihahaha"
       TCP Server: Listens on port 6969
       IP Address: 192.168.4.1
-      
+
       Receives: "0&" to "180&"
       Sends: "E&" (acknowledgment)
-      
+
       Servo Position: 0° to 180°
 ```
 
@@ -55,6 +57,7 @@ This lab demonstrates ESP32 WiFi TCP server for servo motor control. The ESP32 c
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V power
 - **PWM**: LEDC (LED Control) peripheral for servo control
@@ -62,6 +65,7 @@ This lab demonstrates ESP32 WiFi TCP server for servo motor control. The ESP32 c
 - **Servo Library**: ESP32Servo library required
 
 ### Servo Motor (SG90)
+
 - **Type**: Standard micro servo
 - **Rotation**: 0° to 180°
 - **Control**: PWM signal on GPIO 26
@@ -98,6 +102,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point IP)
@@ -208,6 +213,7 @@ Received request: 45
 ## Data Protocol
 
 **Message Format**:
+
 ```
 Request (Client → Server):
   Angle + "&"
@@ -219,6 +225,7 @@ Response (Server → Client):
 ```
 
 **TCP Server Flow**:
+
 ```
 1. Server listens on port 6969
 2. Client connects
@@ -240,19 +247,19 @@ PWM Signal for Servo:
   0° Position:     500µs pulse (approx)
   90° Position:   1500µs pulse
  180° Position:   2400µs pulse
- 
+
  Frequency: 50Hz (20ms period)
- 
+
      ┌─┐                    20ms
   0° │ │                  ◄──────►
      ┴─┴──────────────────
      500µs
-     
+
      ┌────┐                20ms
  90° │    │              ◄──────►
      ┴────┴──────────────
       1500µs
-      
+
      ┌──────┐              20ms
 180° │      │            ◄──────►
      ┴──────┴────────────
@@ -261,19 +268,19 @@ PWM Signal for Servo:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Servo not moving | No power to servo | Check 5V and GND connections |
-| Servo jittering | Insufficient power | Use external 5V supply for servo |
-| Servo buzzing | Bad PWM signal | Check GPIO 26 connection |
-| Limited rotation range | Wrong servo type | Verify servo is 0-180° (not 360° continuous) |
-| No WiFi AP visible | Code not running | Check Serial Monitor, verify upload |
-| Client can't connect | Server not started | Ensure server sketch running first |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Servo moves erratically | Noise on signal line | Keep signal wire short, away from power wires |
-| ESP32 resets when servo moves | Power supply issue | Use separate 5V supply with common GND |
-| Servo stuck at one angle | Not receiving commands | Check TCP connection, verify client sending data |
-| Wrong angles | Servo calibration | Some servos need pulse width adjustment |
+| Issue                         | Possible Cause         | Solution                                         |
+| ----------------------------- | ---------------------- | ------------------------------------------------ |
+| Servo not moving              | No power to servo      | Check 5V and GND connections                     |
+| Servo jittering               | Insufficient power     | Use external 5V supply for servo                 |
+| Servo buzzing                 | Bad PWM signal         | Check GPIO 26 connection                         |
+| Limited rotation range        | Wrong servo type       | Verify servo is 0-180° (not 360° continuous)     |
+| No WiFi AP visible            | Code not running       | Check Serial Monitor, verify upload              |
+| Client can't connect          | Server not started     | Ensure server sketch running first               |
+| No serial output              | Wrong baud rate        | Set Serial Monitor to 9600 baud                  |
+| Servo moves erratically       | Noise on signal line   | Keep signal wire short, away from power wires    |
+| ESP32 resets when servo moves | Power supply issue     | Use separate 5V supply with common GND           |
+| Servo stuck at one angle      | Not receiving commands | Check TCP connection, verify client sending data |
+| Wrong angles                  | Servo calibration      | Some servos need pulse width adjustment          |
 
 ## Power Considerations
 
@@ -360,13 +367,13 @@ void loop() {
 
 ## ESP32Servo Library vs Arduino Servo
 
-| Feature | Arduino Servo | ESP32Servo |
-|---------|---------------|------------|
-| Platform | AVR Arduino | ESP32 |
-| PWM | Timer-based | LEDC peripheral |
-| Channels | 12 max | 16 max |
-| Compatibility | Not ESP32 | ESP32 only |
-| Installation | Built-in | Must install |
+| Feature       | Arduino Servo | ESP32Servo      |
+| ------------- | ------------- | --------------- |
+| Platform      | AVR Arduino   | ESP32           |
+| PWM           | Timer-based   | LEDC peripheral |
+| Channels      | 12 max        | 16 max          |
+| Compatibility | Not ESP32     | ESP32 only      |
+| Installation  | Built-in      | Must install    |
 
 **MUST use ESP32Servo library for ESP32!**
 

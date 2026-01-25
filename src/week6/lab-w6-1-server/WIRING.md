@@ -3,9 +3,11 @@
 **File**: `lab-w6-1-server.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi TCP server functionality with I2C LCD display. The ESP32 creates a WiFi Access Point and listens for TCP connections from a client (lab-w6-1-client). Counter values received from the client are displayed on a 16×2 I2C LCD. This is the **server** side that receives data from the client.
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - LCD 16×2 with I2C module × 1
 - Breadboard
@@ -13,12 +15,12 @@ This lab demonstrates ESP32 WiFi TCP server functionality with I2C LCD display. 
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 21 (SDA) | LCD I2C | SDA | I2C data line |
-| GPIO 22 (SCL) | LCD I2C | SCL | I2C clock line |
-| 5V | LCD I2C | VCC | Power supply |
-| GND | LCD I2C | GND | Common ground |
+| ESP32 Pin     | Component | Connection | Notes          |
+| ------------- | --------- | ---------- | -------------- |
+| GPIO 21 (SDA) | LCD I2C   | SDA        | I2C data line  |
+| GPIO 22 (SCL) | LCD I2C   | SCL        | I2C clock line |
+| 5V            | LCD I2C   | VCC        | Power supply   |
+| GND           | LCD I2C   | GND        | Common ground  |
 
 ## ASCII Wiring Diagram
 
@@ -37,7 +39,7 @@ This lab demonstrates ESP32 WiFi TCP server functionality with I2C LCD display. 
       │   GND    ●──┼───────┼───┤ GND  │   │
       └─────────────┘       │   └──────┘   │
                             └──────────────┘
-      
+
       WiFi: Creates AP "ESP32-Nihahaha"
       TCP Server: Listens on port 6969
       IP Address: 192.168.4.1
@@ -56,12 +58,14 @@ This lab demonstrates ESP32 WiFi TCP server functionality with I2C LCD display. 
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V power
 - **I2C**: Hardware I2C on GPIO 21 (SDA), GPIO 22 (SCL)
 - **WiFi Mode**: Access Point (AP) mode
 
 ### LCD 16×2 with I2C Module
+
 - **Display**: 16 characters × 2 lines
 - **Interface**: I2C (2 wires: SDA, SCL)
 - **I2C Address**: 0x27 (default, may be 0x3F on some modules)
@@ -90,6 +94,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point IP)
@@ -214,6 +219,7 @@ During Operation:
 ## Data Protocol
 
 **Message Format**:
+
 ```
 Counter Value + "&"
 
@@ -224,6 +230,7 @@ Examples:
 ```
 
 **TCP Server Flow**:
+
 ```
 1. Server listens on port 6969
 2. Client connects
@@ -236,17 +243,17 @@ Examples:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| LCD shows nothing | No power | Check 5V and GND connections |
-| LCD backlight only | Wrong I2C address | Try 0x3F instead of 0x27 |
-| LCD garbled text | I2C wiring issue | Check SDA (21) and SCL (22) connections |
-| No WiFi AP visible | Code not running | Check Serial Monitor, verify upload |
-| AP visible but can't connect | Wrong password | Verify "12345678" password |
-| Client can't connect | Server not started | Ensure server sketch running first |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| LCD not updating | TCP port issue | Verify client connects to port 6969 |
-| IP shows 0.0.0.0 | WiFi not started | Check WiFi.softAP() call |
+| Issue                        | Possible Cause     | Solution                                |
+| ---------------------------- | ------------------ | --------------------------------------- |
+| LCD shows nothing            | No power           | Check 5V and GND connections            |
+| LCD backlight only           | Wrong I2C address  | Try 0x3F instead of 0x27                |
+| LCD garbled text             | I2C wiring issue   | Check SDA (21) and SCL (22) connections |
+| No WiFi AP visible           | Code not running   | Check Serial Monitor, verify upload     |
+| AP visible but can't connect | Wrong password     | Verify "12345678" password              |
+| Client can't connect         | Server not started | Ensure server sketch running first      |
+| No serial output             | Wrong baud rate    | Set Serial Monitor to 9600 baud         |
+| LCD not updating             | TCP port issue     | Verify client connects to port 6969     |
+| IP shows 0.0.0.0             | WiFi not started   | Check WiFi.softAP() call                |
 
 ## Finding I2C Address
 
@@ -259,7 +266,7 @@ void setup() {
   Serial.begin(9600);
   Wire.begin();
   Serial.println("I2C Scanner");
-  
+
   for(byte addr = 1; addr < 127; addr++) {
     Wire.beginTransmission(addr);
     if(Wire.endTransmission() == 0) {
@@ -343,13 +350,13 @@ ESP32 WiFi Modes:
 
 ## TCP Server vs Client
 
-| Feature | Server (this lab) | Client (lab-w6-1-client) |
-|---------|-------------------|--------------------------|
-| WiFi Mode | Access Point | Station |
-| Creates Network | Yes | No |
-| Initiates Connection | No | Yes |
-| Listens | Yes | No |
-| IP Address | Fixed (192.168.4.1) | DHCP assigned |
+| Feature              | Server (this lab)   | Client (lab-w6-1-client) |
+| -------------------- | ------------------- | ------------------------ |
+| WiFi Mode            | Access Point        | Station                  |
+| Creates Network      | Yes                 | No                       |
+| Initiates Connection | No                  | Yes                      |
+| Listens              | Yes                 | No                       |
+| IP Address           | Fixed (192.168.4.1) | DHCP assigned            |
 
 ## Applications
 

@@ -3,9 +3,11 @@
 **File**: `lab-w1-1-while.ino`
 
 ## Description
+
 This lab demonstrates sequential LED control using a `while` loop. Six LEDs turn on sequentially, all remain on, then all turn off together, with a buzzer providing audio feedback.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - LEDs (5mm, various colors) × 6
 - Resistor 220Ω × 1
@@ -15,23 +17,23 @@ This lab demonstrates sequential LED control using a `while` loop. Six LEDs turn
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 10 | LED_1 | Anode (positive leg) | First LED |
-| Pin 9 | LED_2 | Anode (positive leg) | Second LED |
-| Pin 8 | LED_3 | Anode (positive leg) | Third LED |
-| Pin 7 | LED_4 | Anode (positive leg) | Fourth LED |
-| Pin 6 | LED_5 | Anode (positive leg) | Fifth LED |
-| Pin 5 | LED_6 | Anode (positive leg) | Sixth LED |
-| Pin 4 | Buzzer | Positive terminal | Audio feedback |
-| GND | All LEDs & Buzzer | Via 220Ω resistor/Direct | Common ground |
+| Arduino Pin | Component         | Connection               | Notes          |
+| ----------- | ----------------- | ------------------------ | -------------- |
+| Pin 10      | LED_1             | Anode (positive leg)     | First LED      |
+| Pin 9       | LED_2             | Anode (positive leg)     | Second LED     |
+| Pin 8       | LED_3             | Anode (positive leg)     | Third LED      |
+| Pin 7       | LED_4             | Anode (positive leg)     | Fourth LED     |
+| Pin 6       | LED_5             | Anode (positive leg)     | Fifth LED      |
+| Pin 5       | LED_6             | Anode (positive leg)     | Sixth LED      |
+| Pin 4       | Buzzer            | Positive terminal        | Audio feedback |
+| GND         | All LEDs & Buzzer | Via 220Ω resistor/Direct | Common ground  |
 
 ## ASCII Wiring Diagram
 
 ```
         Arduino UNO                    Components
-      ┌─────────────┐              
-      │             │              
+      ┌─────────────┐
+      │             │
       │   Pin 10 ●──┼────────────LED1+  ──┐
       │   Pin 9  ●──┼────────────LED2+  ──┤
       │   Pin 8  ●──┼────────────LED3+  ──┤
@@ -39,9 +41,9 @@ This lab demonstrates sequential LED control using a `while` loop. Six LEDs turn
       │   Pin 6  ●──┼────────────LED5+  ──┤
       │   Pin 5  ●──┼────────────LED6+  ──┤
       │   Pin 4  ●──┼────────────Buzzer+ ─┘
-      │             │              
+      │             │
       │   GND    ●──┼─────────────────────────
-      └─────────────┘              
+      └─────────────┘
 ```
 
 ## Breadboard Layout
@@ -57,6 +59,7 @@ This lab demonstrates sequential LED control using a `while` loop. Six LEDs turn
 ## Component-Specific Details
 
 ### LEDs
+
 - **Type**: Standard 5mm LEDs
 - **Forward Voltage**: ~2V
 - **Current**: ~20mA per LED
@@ -65,6 +68,7 @@ This lab demonstrates sequential LED control using a `while` loop. Six LEDs turn
 - **Note**: Multiple LEDs can be on simultaneously; current increases proportionally
 
 ### Buzzer
+
 - **Type**: Active buzzer (requires DC voltage)
 - **Voltage**: 5V
 - **Connection**: Direct connection to pin 4 (no resistor needed)
@@ -105,16 +109,16 @@ This lab demonstrates sequential LED control using a `while` loop. Six LEDs turn
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| LED not lighting | Wrong polarity | Ensure anode (long leg) to pin, cathode to resistor |
-| LED too dim | Wrong resistor value | Verify 220Ω resistor (Red-Red-Brown) |
-| LED too bright/hot | No resistor | Add 220Ω resistor to common cathode |
-| Buzzer not working | Wrong polarity | Check positive to pin 4, negative to GND |
-| Buzzer silent | Passive buzzer used | Replace with active buzzer |
-| Incorrect sequence | Wrong pin connections | Verify pins 10,9,8,7,6,5 for LED_1 through LED_6 |
-| LEDs don't turn off | Logic error | Check code uploaded correctly |
-| No response | Code not uploaded | Re-upload sketch and check board selection |
+| Issue               | Possible Cause        | Solution                                            |
+| ------------------- | --------------------- | --------------------------------------------------- |
+| LED not lighting    | Wrong polarity        | Ensure anode (long leg) to pin, cathode to resistor |
+| LED too dim         | Wrong resistor value  | Verify 220Ω resistor (Red-Red-Brown)                |
+| LED too bright/hot  | No resistor           | Add 220Ω resistor to common cathode                 |
+| Buzzer not working  | Wrong polarity        | Check positive to pin 4, negative to GND            |
+| Buzzer silent       | Passive buzzer used   | Replace with active buzzer                          |
+| Incorrect sequence  | Wrong pin connections | Verify pins 10,9,8,7,6,5 for LED_1 through LED_6    |
+| LEDs don't turn off | Logic error           | Check code uploaded correctly                       |
+| No response         | Code not uploaded     | Re-upload sketch and check board selection          |
 
 ## Code Reference
 

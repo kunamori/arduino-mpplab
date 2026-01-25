@@ -3,9 +3,11 @@
 **File**: `lab-w6-2-server.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi TCP server for relay control. The ESP32 creates a WiFi Access Point and listens for relay control commands from a TCP client (lab-w6-2-client). Two relays are controlled via commands: ON1/OFF1 for Relay 1, ON2/OFF2 for Relay 2. This is the **server** side that controls physical relays.
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - 5V Relay modules × 2 (or 2-channel relay module)
 - Breadboard
@@ -14,12 +16,12 @@ This lab demonstrates ESP32 WiFi TCP server for relay control. The ESP32 creates
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 12 | Relay 1 | Control signal (IN1) | Active LOW |
-| GPIO 13 | Relay 2 | Control signal (IN2) | Active LOW |
-| 5V | Relays | VCC | Power for relay coils |
-| GND | Relays | GND | Common ground |
+| ESP32 Pin | Component | Connection           | Notes                 |
+| --------- | --------- | -------------------- | --------------------- |
+| GPIO 12   | Relay 1   | Control signal (IN1) | Active LOW            |
+| GPIO 13   | Relay 2   | Control signal (IN2) | Active LOW            |
+| 5V        | Relays    | VCC                  | Power for relay coils |
+| GND       | Relays    | GND                  | Common ground         |
 
 ## ASCII Wiring Diagram
 
@@ -39,11 +41,11 @@ This lab demonstrates ESP32 WiFi TCP server for relay control. The ESP32 creates
                             Relay Contacts:
                             NO COM NC  NO COM NC
                              │  │  │   │  │  │
-      
+
       WiFi: Creates AP "ESP32-Nihahaha"
       TCP Server: Listens on port 6969
       IP Address: 192.168.4.1
-      
+
       Relay Logic (Active LOW):
       - GPIO HIGH (1) → Relay OFF
       - GPIO LOW (0)  → Relay ON
@@ -64,12 +66,14 @@ This lab demonstrates ESP32 WiFi TCP server for relay control. The ESP32 creates
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V power
 - **GPIO Output**: 3.3V logic level (sufficient for most relay modules)
 - **WiFi Mode**: Access Point (AP) mode
 
 ### Relay Module
+
 - **Type**: Electromechanical relay (typically SRD-05VDC-SL-C)
 - **Control Voltage**: 5V coil
 - **Control Logic**: Active LOW (LOW=ON, HIGH=OFF)
@@ -103,6 +107,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point IP)
@@ -223,6 +228,7 @@ Client disconnected
 ## Data Protocol
 
 **Message Format**:
+
 ```
 Command + "&"
 
@@ -236,6 +242,7 @@ Relay 2 Commands:
 ```
 
 **TCP Server Flow**:
+
 ```
 1. Server listens on port 6969
 2. Client connects
@@ -252,7 +259,7 @@ Relay 2 Commands:
 ## Relay State Truth Table
 
 | Command | GPIO 12 | GPIO 13 | Relay 1 | Relay 2 |
-|---------|---------|---------|---------|---------|
+| ------- | ------- | ------- | ------- | ------- |
 | Initial | HIGH    | HIGH    | OFF     | OFF     |
 | ON1     | LOW     | HIGH    | ON      | OFF     |
 | ON2     | HIGH    | LOW     | OFF     | ON      |
@@ -262,22 +269,23 @@ Relay 2 Commands:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Relay not clicking | No power to relay | Check 5V and GND connections |
-| Relay always ON | Active LOW logic | HIGH=OFF, LOW=ON (check code) |
-| Relay LED on, no switching | Relay coil not energized | Check relay module VCC connection |
-| Both relays respond together | Wiring crossed | Verify GPIO 12→IN1, GPIO 13→IN2 |
-| No WiFi AP visible | Code not running | Check Serial Monitor, verify upload |
-| Client can't connect | Server not started | Ensure server sketch running first |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Command not working | Wrong delimiter | Ensure client sends "&" after command |
-| Relay state random on boot | Floating pins | Code sets HIGH on startup |
-| ESP32 resets when relay switches | Power supply issue | Use separate 5V supply for relays |
+| Issue                            | Possible Cause           | Solution                              |
+| -------------------------------- | ------------------------ | ------------------------------------- |
+| Relay not clicking               | No power to relay        | Check 5V and GND connections          |
+| Relay always ON                  | Active LOW logic         | HIGH=OFF, LOW=ON (check code)         |
+| Relay LED on, no switching       | Relay coil not energized | Check relay module VCC connection     |
+| Both relays respond together     | Wiring crossed           | Verify GPIO 12→IN1, GPIO 13→IN2       |
+| No WiFi AP visible               | Code not running         | Check Serial Monitor, verify upload   |
+| Client can't connect             | Server not started       | Ensure server sketch running first    |
+| No serial output                 | Wrong baud rate          | Set Serial Monitor to 9600 baud       |
+| Command not working              | Wrong delimiter          | Ensure client sends "&" after command |
+| Relay state random on boot       | Floating pins            | Code sets HIGH on startup             |
+| ESP32 resets when relay switches | Power supply issue       | Use separate 5V supply for relays     |
 
 ## Safety Warnings
 
 ⚠️ **ELECTRICAL SAFETY**:
+
 - **HIGH VOLTAGE**: Relay contacts can switch mains voltage (110V/220V AC)
 - **NEVER** connect mains voltage while breadboarding
 - Use relays only with low voltage loads (12V DC) for testing
@@ -365,7 +373,7 @@ Example Load Connection (12V DC):
   +12V ──► NO1
   COM1 ──► Load (e.g., lamp)
   Load ──► GND
-  
+
   When Relay 1 ON: +12V flows through load
   When Relay 1 OFF: No connection
 ```

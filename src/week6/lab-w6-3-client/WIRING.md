@@ -3,9 +3,11 @@
 **File**: `lab-w6-3-client.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi TCP client for controlling a remote servo motor using a potentiometer. The potentiometer value (0-4095) is mapped to servo angle (0-180°) and sent to a TCP server over WiFi. The server acknowledges each command. This is the **client** side that reads the sensor and sends angle data to the server (lab-w6-3-server).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - Potentiometer (10kΩ) × 1
 - Breadboard
@@ -13,17 +15,17 @@ This lab demonstrates ESP32 WiFi TCP client for controlling a remote servo motor
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 34 | Potentiometer | Wiper (middle pin) | ADC1_CH6, input only |
-| 3.3V | Potentiometer | One outer pin | Power |
-| GND | Potentiometer | Other outer pin | Ground |
+| ESP32 Pin | Component     | Connection         | Notes                |
+| --------- | ------------- | ------------------ | -------------------- |
+| GPIO 34   | Potentiometer | Wiper (middle pin) | ADC1_CH6, input only |
+| 3.3V      | Potentiometer | One outer pin      | Power                |
+| GND       | Potentiometer | Other outer pin    | Ground               |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT        Potentiometer (10kΩ)
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │           ┌─────┐
       │  3.3V    ●──┼───────────┤  1  │  (Outer pin 1)
       │             │           │     │
@@ -33,11 +35,11 @@ This lab demonstrates ESP32 WiFi TCP client for controlling a remote servo motor
       │             │           │  ╲  │
       │  GND     ●──┼───────────┤  3  │  (Outer pin 2)
       │             │           └─────┘
-      └─────────────┘       
+      └─────────────┘
 
       WiFi: Connects to "ESP32-Nihahaha" (server's AP)
       TCP: Connects to 192.168.4.1:6969
-      
+
       Data Flow:
       Potentiometer → ADC (0-4095) → Map to 0-180° → Send to server
 ```
@@ -55,6 +57,7 @@ This lab demonstrates ESP32 WiFi TCP client for controlling a remote servo motor
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic
 - **ADC**: 12-bit resolution (0-4095)
@@ -62,6 +65,7 @@ This lab demonstrates ESP32 WiFi TCP client for controlling a remote servo motor
 - **ADC Reference**: 3.3V
 
 ### Potentiometer
+
 - **Type**: Rotary potentiometer
 - **Resistance**: 10kΩ (1kΩ to 100kΩ works)
 - **Rotation**: ~270° (varies by model)
@@ -94,6 +98,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point)
@@ -205,6 +210,7 @@ Response from server: E
 ## Data Protocol
 
 **Message Format**:
+
 ```
 Angle + "&"
 
@@ -215,6 +221,7 @@ Examples:
 ```
 
 **TCP Transaction** (Request-Response):
+
 ```
 Client → Server: "90&"
 Client waits for response...
@@ -238,18 +245,18 @@ Formula: angle = (ADC_value × 180) / 4095
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Won't connect to WiFi | Server not running | Start server first (lab-w6-3-server) |
-| Stuck on "..." | Wrong SSID/password | Verify credentials match server |
-| ADC always reads 0 | Wrong pin | GPIO 34 is input-only, check connection |
-| ADC reads random values | Floating pin | Check potentiometer wiring |
-| Servo doesn't move | TCP connection failed | Check server is running |
-| Servo jitters | Noisy ADC reading | Add 100nF capacitor across pot |
-| Limited angle range | ADC not full range | Check pot connected to 3.3V and GND |
-| No response from server | Server not sending "E&" | Check server code |
-| WiFi disconnects | Weak signal | Move ESP32s closer together |
-| Servo angle inverted | Pot wiring reversed | Swap 3.3V and GND on pot |
+| Issue                   | Possible Cause          | Solution                                |
+| ----------------------- | ----------------------- | --------------------------------------- |
+| Won't connect to WiFi   | Server not running      | Start server first (lab-w6-3-server)    |
+| Stuck on "..."          | Wrong SSID/password     | Verify credentials match server         |
+| ADC always reads 0      | Wrong pin               | GPIO 34 is input-only, check connection |
+| ADC reads random values | Floating pin            | Check potentiometer wiring              |
+| Servo doesn't move      | TCP connection failed   | Check server is running                 |
+| Servo jitters           | Noisy ADC reading       | Add 100nF capacitor across pot          |
+| Limited angle range     | ADC not full range      | Check pot connected to 3.3V and GND     |
+| No response from server | Server not sending "E&" | Check server code                       |
+| WiFi disconnects        | Weak signal             | Move ESP32s closer together             |
+| Servo angle inverted    | Pot wiring reversed     | Swap 3.3V and GND on pot                |
 
 ## Code Reference
 
@@ -307,7 +314,7 @@ ESP32 ADC1 Channels (available):
 - GPIO 36: ADC1_CH0
 - GPIO 39: ADC1_CH3
 
-Note: 
+Note:
 - GPIO 34-39 are INPUT ONLY (no OUTPUT mode)
 - ADC2 channels unavailable when WiFi is used
 - 12-bit resolution: 0-4095
@@ -318,6 +325,7 @@ Note:
 ## Network Architecture
 
 This lab demonstrates **client-server servo control with feedback**:
+
 - **Server**: Creates WiFi Access Point, controls physical servo
 - **Client**: Reads potentiometer, sends angle commands via TCP
 - **Protocol**: TCP with request-response pattern

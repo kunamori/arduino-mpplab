@@ -3,9 +3,11 @@
 **File**: `lab-w2-2.ino`
 
 ## Description
+
 This lab demonstrates analog input reading using a potentiometer. The Arduino reads the analog voltage (0-5V) from the potentiometer and displays the value on the Serial Monitor.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - Potentiometer 10kΩ × 1
 - Breadboard
@@ -13,17 +15,17 @@ This lab demonstrates analog input reading using a potentiometer. The Arduino re
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| A0 | Potentiometer | Wiper (middle pin) | Analog input |
-| 5V | Potentiometer | One end terminal | Power supply |
-| GND | Potentiometer | Other end terminal | Ground |
+| Arduino Pin | Component     | Connection         | Notes        |
+| ----------- | ------------- | ------------------ | ------------ |
+| A0          | Potentiometer | Wiper (middle pin) | Analog input |
+| 5V          | Potentiometer | One end terminal   | Power supply |
+| GND         | Potentiometer | Other end terminal | Ground       |
 
 ## ASCII Wiring Diagram
 
 ```
         Arduino UNO              Potentiometer
-      ┌─────────────┐              
+      ┌─────────────┐
       │             │          ┌───────────┐
       │   5V     ●──┼──────────┤ Terminal 1│ (VCC)
       │             │          │           │
@@ -44,6 +46,7 @@ This lab demonstrates analog input reading using a potentiometer. The Arduino re
 ## Component-Specific Details
 
 ### Potentiometer (10kΩ)
+
 - **Type**: Variable resistor (rotary potentiometer)
 - **Resistance**: 10kΩ (10,000 ohms)
 - **Rotation**: Typically 270-300 degrees
@@ -65,7 +68,7 @@ This lab demonstrates analog input reading using a potentiometer. The Arduino re
 ## How It Works
 
 1. **Analog Reading**: Arduino reads analog value from pin A0 (0-1023)
-2. **Voltage Conversion**: 
+2. **Voltage Conversion**:
    - Raw value (0-1023) is read from `analogRead(A0)`
    - Divided by 1023 to get ratio (0.0 to 1.0)
    - Multiplied by 5 to get voltage (0.0V to 5.0V)
@@ -117,16 +120,16 @@ Examples:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| Always reads 0.00V | Wiper not connected to A0 | Check middle pin to A0 connection |
-| Always reads 5.00V | Wrong wiper connection | Verify middle pin is to A0, not outer pin |
-| No change when rotating | Wrong potentiometer terminal | Swap the outer terminals |
-| Erratic readings | Loose connection | Check all connections, especially wiper |
-| Reading noise/jitter | Normal ADC noise | Add small capacitor (0.1µF) across A0 and GND |
-| No serial output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Value backwards | Terminals swapped | Swap the 5V and GND connections |
-| Reading stuck | Faulty potentiometer | Test continuity, replace if needed |
+| Issue                   | Possible Cause               | Solution                                      |
+| ----------------------- | ---------------------------- | --------------------------------------------- |
+| Always reads 0.00V      | Wiper not connected to A0    | Check middle pin to A0 connection             |
+| Always reads 5.00V      | Wrong wiper connection       | Verify middle pin is to A0, not outer pin     |
+| No change when rotating | Wrong potentiometer terminal | Swap the outer terminals                      |
+| Erratic readings        | Loose connection             | Check all connections, especially wiper       |
+| Reading noise/jitter    | Normal ADC noise             | Add small capacitor (0.1µF) across A0 and GND |
+| No serial output        | Wrong baud rate              | Set Serial Monitor to 9600 baud               |
+| Value backwards         | Terminals swapped            | Swap the 5V and GND connections               |
+| Reading stuck           | Faulty potentiometer         | Test continuity, replace if needed            |
 
 ## Understanding Analog Input
 
@@ -143,6 +146,7 @@ Physical Voltage → ADC → Digital Value (0-1023)
 ```
 
 The code then converts this back to voltage for display:
+
 ```
 Digital Value → Calculation → Voltage Display
 ```

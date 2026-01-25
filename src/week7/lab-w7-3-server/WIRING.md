@@ -3,9 +3,11 @@
 **File**: `lab-w7-3-server.ino`
 
 ## Description
+
 This lab demonstrates ESP32 WiFi UDP server for RGB LED control. The ESP32 creates a WiFi Access Point and listens for UDP packets containing color and brightness data. The RGB LED displays the selected color (Red, Green, or Blue) at the specified brightness (0-255). The server acknowledges each RGB update. This is the **server** side that controls a physical RGB LED based on client input (lab-w7-3-client).
 
 ## Components Required
+
 - ESP32 DEVKIT × 1
 - RGB LED (common cathode) × 1
 - 220Ω resistor × 1 (shared for all colors)
@@ -14,18 +16,18 @@ This lab demonstrates ESP32 WiFi UDP server for RGB LED control. The ESP32 creat
 
 ## Pin Configuration
 
-| ESP32 Pin | Component | Connection | Notes |
-|-----------|-----------|------------|-------|
-| GPIO 4 | RGB LED | Red anode | PWM capable |
-| GPIO 2 | RGB LED | Green anode | PWM capable |
-| GPIO 15 | RGB LED | Blue anode | PWM capable |
-| GND | RGB LED | Common cathode → 220Ω resistor → GND | Shared resistor |
+| ESP32 Pin | Component | Connection                           | Notes           |
+| --------- | --------- | ------------------------------------ | --------------- |
+| GPIO 4    | RGB LED   | Red anode                            | PWM capable     |
+| GPIO 2    | RGB LED   | Green anode                          | PWM capable     |
+| GPIO 15   | RGB LED   | Blue anode                           | PWM capable     |
+| GND       | RGB LED   | Common cathode → 220Ω resistor → GND | Shared resistor |
 
 ## ASCII Wiring Diagram
 
 ```
         ESP32 DEVKIT         RGB LED (Common Cathode)
-      ┌─────────────┐       
+      ┌─────────────┐
       │             │              ┌───────┐
       │   GPIO 4 ●──┼──────────────┤ R (+) │
       │             │              │       │
@@ -42,13 +44,13 @@ This lab demonstrates ESP32 WiFi UDP server for RGB LED control. The ESP32 creat
       UDP Server: Listens on port 6969
       IP Address: 192.168.4.1
       Server responds to: 192.168.4.5
-      
+
       Receives: "color_brightness&"
       Examples: "0_255&" (Red, full brightness)
                 "1_128&" (Green, half brightness)
                 "2_0&"   (Blue, off)
       Sends: "A" (acknowledgment)
-      
+
       Color Codes:
         0 = Red (GPIO 4)
         1 = Green (GPIO 2)
@@ -70,6 +72,7 @@ This lab demonstrates ESP32 WiFi UDP server for RGB LED control. The ESP32 creat
 ## Component-Specific Details
 
 ### ESP32 DEVKIT
+
 - **WiFi**: 802.11 b/g/n
 - **Operating Voltage**: 3.3V logic, 5V power
 - **PWM**: LEDC (LED Control) peripheral for brightness control
@@ -77,6 +80,7 @@ This lab demonstrates ESP32 WiFi UDP server for RGB LED control. The ESP32 creat
 - **GPIO 4, 2, 15**: All PWM capable
 
 ### RGB LED (Common Cathode)
+
 - **Type**: 4-pin RGB LED with common cathode
 - **Pin Identification**:
   - **Longest pin**: Common cathode (-)
@@ -91,6 +95,7 @@ This lab demonstrates ESP32 WiFi UDP server for RGB LED control. The ESP32 creat
 - **PWM Control**: Brightness via duty cycle (0-255)
 
 ### Resistor Configuration
+
 - **Value**: 220Ω (red-red-brown)
 - **Configuration**: Single resistor on common cathode to GND
 - **Purpose**: Current limiting for all three colors
@@ -118,6 +123,7 @@ Network Topology:
 ```
 
 ### Network Details
+
 - **SSID**: "ESP32-Nihahaha"
 - **Password**: "12345678"
 - **Server IP**: 192.168.4.1 (Access Point IP)
@@ -132,7 +138,7 @@ Network Topology:
 - **WiFi Mode**: Access Point (AP) mode - creates its own WiFi network
 - **Protocol**: UDP (connectionless, bidirectional)
 - **Data Format**: Receives "color_brightness&" (e.g., "0_180&", "1_255&", "2_100&")
-- **Parsing**: Splits string by "_" and "&" delimiters
+- **Parsing**: Splits string by "\_" and "&" delimiters
 - **Color Codes**: 0=Red, 1=Green, 2=Blue
 - **Brightness**: 0-255 (PWM duty cycle)
 - **Acknowledgment**: Sends "A" back to 192.168.4.5 after processing
@@ -164,7 +170,7 @@ Network Topology:
 
 5. **Data Parsing**:
    - `splitString()` function processes input
-   - Splits by "_" and "&" delimiters
+   - Splits by "\_" and "&" delimiters
    - Extracts two values:
      - `data[0]`: Color selection (0, 1, or 2)
      - `data[1]`: Brightness (0-255)
@@ -267,6 +273,7 @@ AP IP: 192.168.4.1
 ## Data Protocol
 
 **Request Format** (Client → Server):
+
 ```
 "color_brightness&"
 
@@ -279,7 +286,7 @@ Color codes:
   0 = Red (GPIO 4)
   1 = Green (GPIO 2)
   2 = Blue (GPIO 15)
-  
+
 Brightness: 0-255 (PWM duty cycle)
   0 = Off
   128 = Half brightness
@@ -287,6 +294,7 @@ Brightness: 0-255 (PWM duty cycle)
 ```
 
 **Response Format** (Server → Client):
+
 ```
 "A"
 
@@ -295,6 +303,7 @@ Sent to 192.168.4.5:6969
 ```
 
 **UDP Transaction**:
+
 ```
 1. Client sends UDP "1_180&" to 192.168.4.1:6969
 2. Server receives packet
@@ -336,18 +345,18 @@ Examples with this lab:
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| RGB LED not lighting | Wrong polarity | Verify common cathode to GND, anodes to GPIO |
-| Only one color works | Wrong pin mapping | Check R→4, G→2, B→15 |
-| Wrong colors displayed | RGB pins swapped | Verify RGB LED pinout with datasheet |
-| Dim RGB LED | Resistor too high | Verify 220Ω, not 2.2kΩ |
-| RGB LED too bright | No resistor | Add 220Ω resistor to common cathode |
-| Colors don't mix | Wrong LED type | Must be common cathode, not common anode |
-| No WiFi AP visible | Code not running | Check Serial Monitor, verify upload |
-| Client no response | Wrong client IP | Server hardcoded to 192.168.4.5 |
-| No acknowledgment sent | UDP response failed | Check client IP is 192.168.4.5 |
-| Serial shows wrong values | Parsing error | Check string format "X_Y&" |
+| Issue                     | Possible Cause      | Solution                                     |
+| ------------------------- | ------------------- | -------------------------------------------- |
+| RGB LED not lighting      | Wrong polarity      | Verify common cathode to GND, anodes to GPIO |
+| Only one color works      | Wrong pin mapping   | Check R→4, G→2, B→15                         |
+| Wrong colors displayed    | RGB pins swapped    | Verify RGB LED pinout with datasheet         |
+| Dim RGB LED               | Resistor too high   | Verify 220Ω, not 2.2kΩ                       |
+| RGB LED too bright        | No resistor         | Add 220Ω resistor to common cathode          |
+| Colors don't mix          | Wrong LED type      | Must be common cathode, not common anode     |
+| No WiFi AP visible        | Code not running    | Check Serial Monitor, verify upload          |
+| Client no response        | Wrong client IP     | Server hardcoded to 192.168.4.5              |
+| No acknowledgment sent    | UDP response failed | Check client IP is 192.168.4.5               |
+| Serial shows wrong values | Parsing error       | Check string format "X_Y&"                   |
 
 ## Code Reference
 
@@ -438,7 +447,7 @@ PWM Waveform (50% duty cycle):
      ┌────┐    ┌────┐    ┌────┐
      │    │    │    │    │    │
   ───┘    └────┘    └────┘    └────
-  
+
   ON: 50% of time
   OFF: 50% of time
   Average current: 50% of max
@@ -452,6 +461,7 @@ LED perceives average light intensity
 ⚠️ **Important**: This lab uses COMMON CATHODE RGB LED
 
 **Common Cathode** (this lab):
+
 - Common pin: Cathode (-) to GND
 - R, G, B pins: Anodes (+) to GPIO
 - GPIO HIGH = LED ON
@@ -459,6 +469,7 @@ LED perceives average light intensity
 - PWM HIGH % = Brightness
 
 **Common Anode** (NOT this lab):
+
 - Common pin: Anode (+) to VCC
 - R, G, B pins: Cathodes (-) to GPIO
 - GPIO LOW = LED ON
@@ -473,10 +484,10 @@ Single 220Ω Resistor on Common Cathode:
 
 Assume Red LED at full brightness (255):
   ESP32 3.3V → Red LED (2V drop) → 220Ω → GND
-  
+
   Voltage across resistor: 3.3V - 2V = 1.3V
   Current: I = V/R = 1.3V / 220Ω ≈ 6mA
-  
+
   ✓ Safe: 6mA < 20mA max LED current
   ✓ GPIO safe: 6mA < 40mA max per pin
 
@@ -491,6 +502,7 @@ If multiple colors ON simultaneously:
 ## Network Architecture
 
 This lab demonstrates **bidirectional UDP RGB control**:
+
 - **Server**: Creates WiFi Access Point, controls RGB LED via PWM
 - **Client**: Sends color/brightness commands, receives acknowledgments
 - **Protocol**: UDP with custom acknowledgment

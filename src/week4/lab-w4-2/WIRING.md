@@ -3,9 +3,11 @@
 **File**: `lab-w4-2.ino`
 
 ## Description
+
 This lab demonstrates reading temperature and humidity data from a DHT22 digital sensor. The Arduino reads and displays temperature (Celsius and Fahrenheit) and humidity percentage via the Serial Monitor.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - DHT22 Temperature/Humidity Sensor × 1
 - Resistor 10kΩ × 1 (pull-up resistor, often built into sensor module)
@@ -14,11 +16,11 @@ This lab demonstrates reading temperature and humidity data from a DHT22 digital
 
 ## Pin Configuration
 
-| Arduino Pin | Component | Connection | Notes |
-|------------|-----------|------------|-------|
-| Pin 2 | DHT22 | Data pin | Digital I/O with one-wire protocol |
-| 5V | DHT22 | VCC/+ | Power supply |
-| GND | DHT22 | GND/- | Ground |
+| Arduino Pin | Component | Connection | Notes                              |
+| ----------- | --------- | ---------- | ---------------------------------- |
+| Pin 2       | DHT22     | Data pin   | Digital I/O with one-wire protocol |
+| 5V          | DHT22     | VCC/+      | Power supply                       |
+| GND         | DHT22     | GND/-      | Ground                             |
 
 ## ASCII Wiring Diagram
 
@@ -39,6 +41,7 @@ Note: Some DHT22 modules have built-in pull-up resistor
 ## DHT22 Sensor Pinout
 
 **4-Pin DHT22 (raw sensor)**:
+
 ```
   Front View:
   ┌─────────┐
@@ -54,6 +57,7 @@ Note: Some DHT22 modules have built-in pull-up resistor
 ```
 
 **3-Pin DHT22 Module**:
+
 ```
   ┌─────────┐
   │  DHT22  │
@@ -78,6 +82,7 @@ Note: Some DHT22 modules have built-in pull-up resistor
 ## Component-Specific Details
 
 ### DHT22 Sensor
+
 - **Type**: Digital temperature and humidity sensor
 - **Temperature Range**: -40°C to 80°C (±0.5°C accuracy)
 - **Humidity Range**: 0-100% RH (±2% accuracy)
@@ -87,6 +92,7 @@ Note: Some DHT22 modules have built-in pull-up resistor
 - **Library Required**: DHT sensor library by Adafruit
 
 ### Pull-up Resistor
+
 - **Value**: 10kΩ
 - **Purpose**: Required for one-wire communication
 - **Note**: Often integrated in pre-assembled modules
@@ -157,23 +163,23 @@ Temp (F): 74.48
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| "Failed to read" error | Loose connection | Check all wire connections |
-| Always reads same value | Sensor not responding | Check power connections (VCC, GND) |
-| No output | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Erratic readings | No pull-up resistor | Add 10kΩ between DATA and VCC |
-| Reading too slow | Normal behavior | DHT22 limited to 0.5 Hz sampling |
-| Temperature off by constant | Sensor calibration | Note offset and apply correction in code |
-| NaN errors | Timing issue | Increase delay between readings |
-| Sensor hot | Wrong power connection | Immediately disconnect, check wiring |
+| Issue                       | Possible Cause         | Solution                                 |
+| --------------------------- | ---------------------- | ---------------------------------------- |
+| "Failed to read" error      | Loose connection       | Check all wire connections               |
+| Always reads same value     | Sensor not responding  | Check power connections (VCC, GND)       |
+| No output                   | Wrong baud rate        | Set Serial Monitor to 9600 baud          |
+| Erratic readings            | No pull-up resistor    | Add 10kΩ between DATA and VCC            |
+| Reading too slow            | Normal behavior        | DHT22 limited to 0.5 Hz sampling         |
+| Temperature off by constant | Sensor calibration     | Note offset and apply correction in code |
+| NaN errors                  | Timing issue           | Increase delay between readings          |
+| Sensor hot                  | Wrong power connection | Immediately disconnect, check wiring     |
 
 ## Understanding DHT22 Communication
 
 The DHT22 uses a custom one-wire protocol:
 
 ```
-Arduino sends start signal → DHT22 responds → 
+Arduino sends start signal → DHT22 responds →
 DHT22 sends 40 bits of data:
   - 16 bits: Humidity (0.1% resolution)
   - 16 bits: Temperature (0.1°C resolution)
@@ -201,7 +207,7 @@ void loop() {
   float h = dht.readHumidity();
   float t = dht.readTemperature();
   float f = dht.readTemperature(true);
-  
+
   if(isnan(h) || isnan(t) || isnan(f)) {
     Serial.println("ERROR: Failed to Read from DHT Sensors.");
     return;
@@ -227,6 +233,7 @@ Example: 23.5°C = (23.5 × 1.8) + 32 = 74.3°F
 Required library: **DHT sensor library by Adafruit**
 
 Install via Arduino IDE:
+
 1. Sketch → Include Library → Manage Libraries
 2. Search for "DHT sensor library"
 3. Install "DHT sensor library by Adafruit"
@@ -243,11 +250,11 @@ Install via Arduino IDE:
 
 ## Comparison: DHT22 vs DHT11
 
-| Feature | DHT22 | DHT11 |
-|---------|-------|-------|
-| Temperature Range | -40 to 80°C | 0 to 50°C |
-| Temperature Accuracy | ±0.5°C | ±2°C |
-| Humidity Range | 0-100% | 20-80% |
-| Humidity Accuracy | ±2% | ±5% |
-| Sampling Rate | 0.5 Hz | 1 Hz |
-| Price | Higher | Lower |
+| Feature              | DHT22       | DHT11     |
+| -------------------- | ----------- | --------- |
+| Temperature Range    | -40 to 80°C | 0 to 50°C |
+| Temperature Accuracy | ±0.5°C      | ±2°C      |
+| Humidity Range       | 0-100%      | 20-80%    |
+| Humidity Accuracy    | ±2%         | ±5%       |
+| Sampling Rate        | 0.5 Hz      | 1 Hz      |
+| Price                | Higher      | Lower     |

@@ -3,9 +3,11 @@
 **File**: `lab-w3-3.ino`
 
 ## Description
+
 This lab demonstrates multiplexed dual 7-segment display control via serial input. Users can display any number from 00-99 by sending values through the Serial Monitor, using direct port manipulation for efficient display refresh.
 
 ## Components Required
+
 - Arduino UNO R3 × 1
 - 18-pin Dual 7-Segment Display (Common Anode) × 1
 - Resistors 220Ω × 7 (optional, for current limiting)
@@ -16,18 +18,18 @@ This lab demonstrates multiplexed dual 7-segment display control via serial inpu
 
 ## Pin Configuration
 
-| Arduino Pin | Function | Connection | Notes |
-|------------|----------|------------|-------|
-| Pin 8 | Segment A | Display pins 10, 18 | PORTB bit 0 |
-| Pin 9 | Segment B | Display pins 7, 16 | PORTB bit 1 |
-| Pin 10 | Segment C | Display pins 4, 14 | PORTB bit 2 |
-| Pin 11 | Segment D | Display pins 2, 12 | PORTB bit 3 |
-| Pin 12 | Segment E | Display pins 1, 11 | PORTB bit 4 |
-| Pin 13 | Segment F | Display pins 9, 17 | PORTB bit 5 |
-| Pin 6 | Segment G | Display pins 5, 15 | Digital output |
-| Pin 5 | Digit 1 Control | Display pin 6 (CA) | Common Anode 1 |
-| Pin 4 | Digit 2 Control | Display pin 8 (CA) | Common Anode 2 |
-| GND | Common | Segments via resistors | Ground |
+| Arduino Pin | Function        | Connection             | Notes          |
+| ----------- | --------------- | ---------------------- | -------------- |
+| Pin 8       | Segment A       | Display pins 10, 18    | PORTB bit 0    |
+| Pin 9       | Segment B       | Display pins 7, 16     | PORTB bit 1    |
+| Pin 10      | Segment C       | Display pins 4, 14     | PORTB bit 2    |
+| Pin 11      | Segment D       | Display pins 2, 12     | PORTB bit 3    |
+| Pin 12      | Segment E       | Display pins 1, 11     | PORTB bit 4    |
+| Pin 13      | Segment F       | Display pins 9, 17     | PORTB bit 5    |
+| Pin 6       | Segment G       | Display pins 5, 15     | Digital output |
+| Pin 5       | Digit 1 Control | Display pin 6 (CA)     | Common Anode 1 |
+| Pin 4       | Digit 2 Control | Display pin 8 (CA)     | Common Anode 2 |
+| GND         | Common          | Segments via resistors | Ground         |
 
 ## ASCII Wiring Diagram
 
@@ -114,6 +116,7 @@ Segments: A, B, C, D, E, F, G, DP (decimal point)
 ## Component-Specific Details
 
 ### 7-Segment Display
+
 - **Type**: Common Anode (CA)
 - **Digits**: 2 digits (00-99)
 - **Segments**: 7 segments per digit (A-G) + decimal point (unused)
@@ -122,6 +125,7 @@ Segments: A, B, C, D, E, F, G, DP (decimal point)
 - **Refresh Rate**: 7ms per digit = ~71 Hz total refresh
 
 ### Display Encoding (Common Anode)
+
 The code uses hexadecimal values to encode digits (inverted for common anode):
 
 ```cpp
@@ -140,7 +144,9 @@ int display_num[10] = {
 ```
 
 ### Port Manipulation
+
 The code uses PORTB (pins 8-13) for fast parallel control:
+
 ```cpp
 DDRB = 0xFF;  // Set all PORTB pins as OUTPUT
 PORTB = display_num[digit];  // Write all 6 segments at once
@@ -249,20 +255,20 @@ Display: 99 (rejected, keeps previous value)
 
 ## Troubleshooting
 
-| Issue | Possible Cause | Solution |
-|-------|----------------|----------|
-| No display | Wrong power/ground | Check CA pins to Arduino control pins |
-| Segments always on | Common cathode display | This code requires common anode |
-| Dim display | High resistance | Remove or reduce current limiting resistors |
-| One digit missing | CA control issue | Check pins 4 or 5 connections |
-| Wrong segments | Incorrect wiring | Verify pin mapping matches table above |
-| Flickering | Slow refresh | Reduce delay from 7ms to 5ms |
-| Ghost images | Overlap timing | Add brief off period between digit switches |
-| No serial response | Wrong baud rate | Set Serial Monitor to 9600 baud |
-| Input not updating | Format issue | Ensure newline is sent (press Enter) |
-| Display shows wrong numbers | Encoding error | Verify display_num array values |
-| One segment always off | Bad connection | Check that segment's wire and resistor |
-| Leading zero missing | Normal for single digits | Type "05" not "5" for leading zero |
+| Issue                       | Possible Cause           | Solution                                    |
+| --------------------------- | ------------------------ | ------------------------------------------- |
+| No display                  | Wrong power/ground       | Check CA pins to Arduino control pins       |
+| Segments always on          | Common cathode display   | This code requires common anode             |
+| Dim display                 | High resistance          | Remove or reduce current limiting resistors |
+| One digit missing           | CA control issue         | Check pins 4 or 5 connections               |
+| Wrong segments              | Incorrect wiring         | Verify pin mapping matches table above      |
+| Flickering                  | Slow refresh             | Reduce delay from 7ms to 5ms                |
+| Ghost images                | Overlap timing           | Add brief off period between digit switches |
+| No serial response          | Wrong baud rate          | Set Serial Monitor to 9600 baud             |
+| Input not updating          | Format issue             | Ensure newline is sent (press Enter)        |
+| Display shows wrong numbers | Encoding error           | Verify display_num array values             |
+| One segment always off      | Bad connection           | Check that segment's wire and resistor      |
+| Leading zero missing        | Normal for single digits | Type "05" not "5" for leading zero          |
 
 ## Display Multiplexing Timing
 
@@ -308,11 +314,11 @@ void loop() {
 
 ## Comparison with lab-w3-2
 
-| Feature | lab-w3-2 (Buttons) | lab-w3-3 (Serial) |
-|---------|-------------------|-------------------|
-| Input Method | Push buttons | Serial Monitor |
-| Interrupts | Yes (pins 2, 3) | No |
-| Input Range | 0-99 (increment/decrement) | 0-99 (direct entry) |
-| Debouncing | Required | Not needed |
-| Complexity | More hardware | Simpler hardware |
-| Use Case | Standalone counter | Development/testing |
+| Feature      | lab-w3-2 (Buttons)         | lab-w3-3 (Serial)   |
+| ------------ | -------------------------- | ------------------- |
+| Input Method | Push buttons               | Serial Monitor      |
+| Interrupts   | Yes (pins 2, 3)            | No                  |
+| Input Range  | 0-99 (increment/decrement) | 0-99 (direct entry) |
+| Debouncing   | Required                   | Not needed          |
+| Complexity   | More hardware              | Simpler hardware    |
+| Use Case     | Standalone counter         | Development/testing |
