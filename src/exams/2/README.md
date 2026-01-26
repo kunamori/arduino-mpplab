@@ -11,8 +11,10 @@ This project uses two microcontroller boards: a Master (server) connected to an 
 
 ### Network Credentials
 
-SSID wifi07
-Password 12345678
+> [!IMPORTANT]
+> SSID: wifi07
+> 
+> Password: 12345678
 
 ### Wiring / Pins
 
