@@ -81,5 +81,5 @@ Complete list of all components needed for this course.
 | DHT22        |        |        |        | ✓      |        |        |  ✓      | ✓       |
 | Keypad 4×4   |        |        |        |        | ✓      |        |        |        |
 | RFID Module  |        |        |        |        | ✓      |        |        |        |
-| Relay        |        |        |        |        |       |  ✓      |        |        |
+| Relay        |        |        |        |        |       |  ✓      |        |   ✓     |
 
