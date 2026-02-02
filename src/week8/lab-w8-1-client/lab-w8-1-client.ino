@@ -1,14 +1,20 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include "DHT.h"
+
+#define PIN_DHT 33
+#define DHTTYPE DHT22
+
+DHT dht(PIN_DHT, DHTTYPE);
 
 // Configuration
 // Wifi credentials
-const char* ssid = "ESP32-Nihahaha";
-const char* password = "12345678";
+const char* ssid = "WIFI_SSID";
+const char* password = "WIFI_PASSWORD";
 // App Script
 String key = "YOUR_APP_SCRIPT_KEY";
 
-
+unsigned long time_request = 0;
 void setup() {
   Serial.begin(9600);
 
@@ -18,15 +24,24 @@ void setup() {
     Serial.println("Connecting to WiFi...");
   }
   Serial.println("Connected to WiFi");
+  dht.begin();
 }
 
 void loop() {
-  if(Serial.available() > 0 ){
-    String data = Serial.readStringUntil('\n');
-    String str = request_google(data);
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  if (isnan(h) || isnan(t)) {
+    Serial.println("ERROR: Failed to read from DHT sensor");
+    return;
+  }
+  if(millis() - time_request >= 5000){
+    String str = request_google(h, t);
     Serial.println(str);
   }
-  String url = "https://script.google.com/macros/s/" + key + "/exec?data=" + data;
+}
+String request_google(float h, float t){
+  HTTPClient http;
+  String url = "https://script.google.com/macros/s/" + key + "/exec?temp=" + String(t) + "&humi=" + String(h);
   http.begin(url.c_str());
   http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
   int httpCode = http.GET();
@@ -35,5 +50,7 @@ void loop() {
     s = http.getString();
   }
   http.end();
+  Serial.println(s);
   return s;
+  
 }
