@@ -24,6 +24,7 @@ Each week's folder contains multiple labs with self-contained Arduino sketches.
 | 5    | Input devices                 | 4x4 Keypad, RFID        |
 | 6    | WiFi networking (ESP32)       | TCP/IP communication    |
 | 7    | UDP networking (ESP32)        | UDP/IP communication    |
+| 8    | Database on Google Sheets (ESP32)        | Google Sheets    |
 
 ## 🚀 Getting Started
 
