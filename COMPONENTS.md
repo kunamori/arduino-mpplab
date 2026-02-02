@@ -69,15 +69,17 @@ Complete list of all components needed for this course.
 
 ## 📊 Component Usage by Week
 
-| Component    | Week 1 | Week 2 | Week 3 | Week 4 | Week 5 | Week 6 | Week 7 |
-| ------------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| Arduino UNO  | ✓      | ✓      | ✓      | ✓      | ✓      |        |        |
-| ESP32        |        |        |        |        |        | ✓      | ✓      |
-| LEDs         | ✓      | ✓      |        |        |        |        |        |
-| Push Buttons |        | ✓      | ✓      |        |        |        |        |
-| RGB LED      |        | ✓      |        |        |        |        |        |
-| 7-Segment    |        |        | ✓      |        |        |        |        |
-| LCD 16×2     |        |        |        | ✓      |        |        |        |
-| DHT22        |        |        |        | ✓      |        |        |        |
-| Keypad 4×4   |        |        |        |        | ✓      |        |        |
-| RFID Module  |        |        |        |        | ✓      |        |        |
+| Component    | Week 1 | Week 2 | Week 3 | Week 4 | Week 5 | Week 6 | Week 7 | Week 8 |
+| ------------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| Arduino UNO  | ✓      | ✓      | ✓      | ✓      | ✓      |        |        |        |
+| ESP32        |        |        |        |        |        | ✓      | ✓      |   ✓     |
+| LEDs         | ✓      | ✓      |        |        |        |        |        |        |
+| Push Buttons |        | ✓      | ✓      |        |        |  ✓      |   ✓     | ✓       |
+| RGB LED      |        | ✓      |        |        |        |        |   ✓     |        |
+| 7-Segment    |        |        | ✓      |        |        |        |        |        |
+| LCD 16×2     |        |        |        | ✓      |        |        |        |        |
+| DHT22        |        |        |        | ✓      |        |        |  ✓      | ✓       |
+| Keypad 4×4   |        |        |        |        | ✓      |        |        |        |
+| RFID Module  |        |        |        |        | ✓      |        |        |        |
+| Relay        |        |        |        |        |       |  ✓      |        |   ✓     |
+
